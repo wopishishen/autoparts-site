@@ -12,7 +12,7 @@ preview_url: http://localhost:3000
 
 backend:
   name: github
-  repo: YOUR_GITHUB_USERNAME/autoparts-site   # ← 推送前替换为你的 GitHub 账号/仓库名
+  repo: wopishishen/autoparts-site   # ← 推送前替换为你的 GitHub 账号/仓库名
   branch: main
   # GitHub App 认证（Implicit Grant），无需自建 OAuth 服务器
   app_id: YOUR_GITHUB_APP_ID                  # ← 部署前创建 GitHub App 后替换
