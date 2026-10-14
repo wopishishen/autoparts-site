@@ -1,0 +1,25 @@
+{
+  "slug": "golden-dragon-bus-body-accessories",
+  "name": "Golden Dragon Bus Body Accessories",
+  "model": "According to the bus model",
+  "summary": "High-quality Golden Dragon bus body accessories, designed for durability and perfect compatibility.",
+  "description": "Discover high-quality Golden Dragon XML6907 bus body accessories, designed for durability and perfect compatibility. Enhance your bus's performance with premium exterior and interior parts, including doors, panels, bumpers, and more. Ideal for repairs and replacements, our accessories ensure reliability and long-lasting use. Global shipping available!",
+  "images": ["/images/products/golden-dragon-body-1.jpg", "/images/products/golden-dragon-body-2.jpg"],
+  "category": "body-parts",
+  "brands": ["golden-dragon"],
+  "tags": ["bus-parts", "body-parts"],
+  "params": {
+    "productName": "Golden Dragon Bus Body Accessories",
+    "size": "Standard size",
+    "materials": "Metal, Plastic, Rubber, Electronic Components",
+    "moq": "1 PCS",
+    "deliveryTime": "3-7 Days when in Stock",
+    "deliveryMethod": "International Express, Sea Shipping, Air Plane, Land Transportation"
+  },
+  "featured": true,
+  "published": true,
+  "seo": {
+    "title": "Golden Dragon Bus Body Accessories - Auto Parts Supplier",
+    "description": "High-quality Golden Dragon XML6907 bus body accessories with durable exterior and interior parts. Global shipping available."
+  }
+}
