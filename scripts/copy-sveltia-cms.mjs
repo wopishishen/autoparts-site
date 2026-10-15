@@ -16,8 +16,12 @@ if (!existsSync(src)) {
 }
 
 mkdirSync(dst, { recursive: true })
-cpSync(src, dst, { recursive: true })
-console.log('[copy-sveltia-cms] copied Sveltia CMS dist to public/admin/vendor/sveltia/')
+// 只复制运行时必需的 .js 文件，跳过 .map source map（占 82% 体积，生产环境不需要）
+cpSync(src, dst, {
+  recursive: true,
+  filter: (srcPath) => !srcPath.endsWith('.map'),
+})
+console.log('[copy-sveltia-cms] copied Sveltia CMS dist (JS only, no sourcemaps) to public/admin/vendor/sveltia/')
 
 // 本地化 Material Symbols 字体：jsdelivr CDN 在国内不稳定，替换为本地字体
 const fontSrc = join(root, 'node_modules', '@fontsource', 'material-symbols-outlined', 'files', 'material-symbols-outlined-latin-400-normal.woff2')

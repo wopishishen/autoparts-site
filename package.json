@@ -9,7 +9,7 @@
     "preview": "nuxt preview",
     "test": "playwright test",
     "test:smoke": "playwright test tests/smoke.spec.ts",
-    "postinstall": "nuxt prepare && node scripts/copy-sveltia-cms.mjs",
+    "postinstall": "node scripts/copy-sveltia-cms.mjs",
     "copy:cms": "node scripts/copy-sveltia-cms.mjs"
   },
   "dependencies": {

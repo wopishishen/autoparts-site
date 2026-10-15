@@ -1,4 +1,4 @@
-// OAuth 回调：用 code 换 token，通过 postMessage 回传给 Decap CMS
+// OAuth 回调：用 code 换 token，通过 postMessage 回传给 Sveltia CMS
 export async function onRequest(context) {
   const { request, env } = context;
   const url = new URL(request.url);
@@ -19,7 +19,7 @@ export async function onRequest(context) {
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'User-Agent': 'decap-cms-oauth-proxy',
+      'User-Agent': 'sveltia-cms-oauth-proxy',
     },
     body: JSON.stringify({
       client_id: env.GITHUB_CLIENT_ID,
