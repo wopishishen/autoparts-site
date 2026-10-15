@@ -4,10 +4,10 @@
   "model": "According to the bus model",
   "summary": "Wholesale Foton bus parts and accessories for reliable replacement and maintenance.",
   "description": "Source manufacturer of Foton bus spare parts and accessories. We supply comprehensive parts covering engine, chassis, gearbox, body and electric systems, ensuring your Foton buses stay reliable on the road. Bulk supply available with fast delivery.",
-  "images": ["/images/products/foton-bus-parts-1.jpg", "/images/products/foton-bus-parts-2.jpg"],
+  "images": [{"image": "/images/products/foton-bus-parts-1.jpg"}, {"image": "/images/products/foton-bus-parts-2.jpg"}],
   "category": "chassis-parts",
-  "brands": ["foton"],
-  "tags": ["bus-parts", "chassis-parts"],
+  "brands": [{"brand": "foton"}],
+  "tags": [{"tag": "bus-parts"}, {"tag": "chassis-parts"}],
   "params": {
     "productName": "Foton Bus Parts and Accessories",
     "size": "Standard size",

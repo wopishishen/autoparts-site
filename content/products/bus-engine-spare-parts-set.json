@@ -12,21 +12,21 @@
   "name": "Bus Engine Spare Parts Set",
   "slug": "bus-engine-spare-parts-set",
   "brands": [
-    "higer",
-    "zhongtong",
-    "kinglong",
-    "golden-dragon",
-    "ankai"
+    {"brand": "higer"},
+    {"brand": "zhongtong"},
+    {"brand": "kinglong"},
+    {"brand": "golden-dragon"},
+    {"brand": "ankai"}
   ],
   "featured": false,
   "published": true,
   "images": [
-    "/images/products/engine-spare-parts-1.jpg",
-    "/images/屏幕截图-2026-10-14-231455.png"
+    {"image": "/images/products/engine-spare-parts-1.jpg"},
+    {"image": "/images/屏幕截图-2026-10-14-231455.png"}
   ],
   "tags": [
-    "engine-parts",
-    "bus-parts"
+    {"tag": "engine-parts"},
+    {"tag": "bus-parts"}
   ],
   "description": "Complete engine spare parts set for Chinese commercial buses, compatible with Higer, Zhongtong, Kinglong, Golden Dragon, Ankai and more. Covers pistons, cylinder gaskets, filters, belts and other frequently replaced wear parts. Ideal for maintenance programs and repair shops.",
   "seo": {

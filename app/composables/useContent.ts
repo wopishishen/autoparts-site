@@ -27,8 +27,21 @@ export function useCategory(slug: string): Category | undefined {
 
 // --- 商品 ---
 const productModules = import.meta.glob('../../content/products/*.json', { eager: true })
+
+/** Decap CMS list 字段存为对象数组，归一化为字符串数组供前端使用 */
+function normalizeList(arr: unknown[], key: string): string[] {
+  if (!Array.isArray(arr)) return []
+  return arr.map((item) => (typeof item === 'string' ? item : (item as Record<string, string>)[key]))
+}
+
 const allProducts: Product[] = Object.values(productModules)
   .map((m) => ((m as { default?: Product }).default ?? m) as Product)
+  .map((p) => ({
+    ...p,
+    images: normalizeList(p.images as unknown[], 'image'),
+    brands: normalizeList(p.brands as unknown[], 'brand'),
+    tags: normalizeList(p.tags as unknown[], 'tag'),
+  }))
   .sort((a, b) => a.name.localeCompare(b.name))
 
 export function useProducts(): Product[] {
