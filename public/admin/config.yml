@@ -8,14 +8,14 @@ local_backend: true
 locale: zh_Hans
 
 # 预览链接前缀（开发环境，部署后改为线上域名）
-preview_url: http://localhost:3000
+preview_url: https://autoparts-site.pages.dev
 
 backend:
   name: github
   repo: wopishishen/autoparts-site   # ← 推送前替换为你的 GitHub 账号/仓库名
   branch: main
   # GitHub App 认证（Implicit Grant），无需自建 OAuth 服务器
-  app_id: YOUR_GITHUB_APP_ID                  # ← 部署前创建 GitHub App 后替换
+  app_id: 5333961
   auth_endpoint: https://github.com/login/oauth/authorize
   auth_scope: repo
 
