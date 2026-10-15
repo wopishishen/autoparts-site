@@ -35,7 +35,7 @@ export async function onRequest(context) {
     return new Response(`Failed to get token: ${JSON.stringify(tokenData)}`, { status: 500 });
   }
 
-  // 返回 HTML，通过 Decap CMS 两步握手协议回传 token
+  // 返回 HTML，通过 Sveltia CMS 两步握手协议回传 token
   const html = `<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"><title>Authorizing...</title></head>

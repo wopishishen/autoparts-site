@@ -16,7 +16,7 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'static',
     prerender: {
-      // Decap CMS 是纯静态文件（public/admin/index.html），不需 Nuxt 渲染
+      // Sveltia CMS 是纯静态文件（public/admin/index.html），不需 Nuxt 渲染
       ignore: ['/admin', '/admin/'],
     },
   },

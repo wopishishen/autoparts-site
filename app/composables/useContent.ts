@@ -1,7 +1,7 @@
 /**
  * 内容数据读取层（SSG 兼容）
  * 通过 import.meta.glob 在构建期自动发现 content/ 下所有 JSON 文件。
- * 运营在 Decap CMS 中新增/编辑商品后，重新构建即可生效。
+ * 运营在 Sveltia CMS 中新增/编辑商品后，重新构建即可生效。
  */
 import type { SiteConfig, Category, Product } from '../types/content'
 
@@ -33,7 +33,7 @@ export function useCategory(slug: string): Category | undefined {
 // --- 商品 ---
 const productModules = import.meta.glob('../../content/products/*.json', { eager: true })
 
-/** Decap CMS list 字段存为对象数组，归一化为字符串数组供前端使用 */
+/** Sveltia CMS list 字段存为对象数组，归一化为字符串数组供前端使用 */
 function normalizeList(arr: unknown[], key: string): string[] {
   if (!Array.isArray(arr)) return []
   return arr.map((item) => (typeof item === 'string' ? item : (item as Record<string, string>)[key]))

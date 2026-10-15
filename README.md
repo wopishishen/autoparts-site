@@ -22,7 +22,7 @@
 |---|---|---|
 | 框架 | Nuxt 4 (Vue 3) | SSG 静态生成 |
 | 样式 | Tailwind CSS 4 | Vite 插件模式 |
-| CMS | Decap CMS 3.17 | Git-based 可视化编辑，零后端 |
+| CMS | Sveltia CMS 0.244 | Git-based 可视化编辑，零后端 |
 | 多语言 | @nuxtjs/i18n | 当前仅英文，架构预留扩展 |
 | SEO | @nuxtjs/seo | sitemap / robots / JSON-LD / OG |
 | 托管 | Cloudflare Pages | 免费档，全球 CDN |
@@ -31,14 +31,14 @@
 ## 本地开发
 
 ```bash
-# 安装依赖（postinstall 会自动复制 Decap CMS 文件到 public/admin/vendor/）
+# 安装依赖（postinstall 会自动复制 Sveltia CMS 文件到 public/admin/vendor/）
 npm install
 
 # 启动网站前台（http://localhost:3000）
 npm run dev
 
 # 另开终端，启动 CMS 本地编辑后端（http://localhost:8081）
-npx decap-server
+npx sveltia-cms-server
 ```
 
 访问：
@@ -68,11 +68,11 @@ site/
 │   ├── categories/      # 7 个系统分类 JSON
 │   └── products/        # 商品 JSON（运营在 CMS 里维护）
 ├── public/
-│   ├── admin/           # Decap CMS 后台（index.html + config.yml）
+│   ├── admin/           # Sveltia CMS 后台（index.html + config.yml）
 │   │   └── vendor/      # CMS 打包文件（postinstall 自动生成，不提交 git）
 │   └── images/          # 商品/分类图片（CMS 上传到此）
 ├── scripts/
-│   └── copy-decap-cms.mjs  # postinstall 脚本：复制 CMS 文件
+│   └── copy-sveltia-cms.mjs  # postinstall 脚本：复制 CMS 文件
 ├── nuxt.config.ts
 ├── package.json
 └── .gitignore
