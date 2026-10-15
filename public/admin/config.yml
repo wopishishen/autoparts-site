@@ -3,8 +3,8 @@
 # 界面语言：简体中文（运营人员使用）
 locale: zh_Hans
 
-# 预览链接前缀
-preview_url: https://autoparts-site.pages.dev
+# 预览链接前缀（编辑页"预览"按钮打开前端网站对应页面）
+preview_url: https://autoparts-site.pages.dev/
 
 backend:
   name: github
@@ -30,7 +30,7 @@ collections:
     summary: "{{name}}"
     identifier_field: name
     sortable_fields: [name, published, featured]
-    preview_path: products/{{slug}}
+    preview_path: /products/{{slug}}
     fields:
       - { label: "Slug（URL 标识，小写连字符，如 golden-dragon-bus-parts）", name: slug, widget: string, hint: "商品详情页 URL：/products/<slug>" }
       - { label: "商品名称", name: name, widget: string }
