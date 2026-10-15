@@ -40,20 +40,28 @@ export async function onRequest(context) {
 <html>
 <head><meta charset="utf-8"><title>Authorizing...</title></head>
 <body>
-<p>Authorization successful. You can close this window.</p>
+<p>Authorization successful. Closing...</p>
 <script>
   (function() {
+    var token = '${token}';
     var msg = {
       type: 'authorization',
       payload: {
-        token: '${token}',
+        token: token,
         provider: 'github'
       }
     };
-    if (window.opener) {
-      window.opener.postMessage(msg, '*');
+    function send() {
+      if (window.opener && !window.opener.closed) {
+        window.opener.postMessage(msg, '*');
+      }
     }
-    window.close();
+    // 连续发送多次，确保 Decap CMS 收到
+    send();
+    setTimeout(send, 200);
+    setTimeout(send, 500);
+    // 延迟关闭，给 postMessage 留时间
+    setTimeout(function() { window.close(); }, 1000);
   })();
 </script>
 </body>
