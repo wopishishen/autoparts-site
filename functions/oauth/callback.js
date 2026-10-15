@@ -44,16 +44,15 @@ export async function onRequest(context) {
 <script>
   (function() {
     var token = '${token}';
-    var msg = {
-      type: 'authorization',
-      payload: {
-        token: token,
-        provider: 'github'
-      }
-    };
+    var payload = JSON.stringify({ token: token, provider: 'github' });
+    // 字符串格式（Netlify CMS 传统协议）
+    var strMsg = 'authorization:github:success:' + payload;
+    // 对象格式（Decap CMS 新协议）
+    var objMsg = { type: 'authorization', payload: { token: token, provider: 'github' } };
     function send() {
       if (window.opener && !window.opener.closed) {
-        window.opener.postMessage(msg, '*');
+        window.opener.postMessage(strMsg, '*');
+        window.opener.postMessage(objMsg, '*');
       }
     }
     // 连续发送多次，确保 Decap CMS 收到
