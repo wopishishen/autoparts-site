@@ -10,8 +10,9 @@ backend:
   name: github
   repo: wopishishen/autoparts-site
   branch: main
-  # GitHub App 认证（Implicit Grant）：填 GitHub App 的 Client ID
-  app_id: Iv23liQ1kgu1mvZ4dFic
+  # OAuth 代理（Cloudflare Pages Functions）
+  base_url: https://autoparts-site.pages.dev
+  auth_endpoint: /oauth/authenticate
 
 media_folder: public/images
 public_folder: /images
