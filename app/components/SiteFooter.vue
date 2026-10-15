@@ -4,7 +4,7 @@ const quickLinks = [
   { label: 'Home', to: '/' },
   { label: 'Products', to: '/products' },
   { label: 'Contact Us', to: '/contact' },
-  { label: 'Content Manager', to: '/admin/', external: true },
+  { label: 'Content Manager', to: '/admin/' },
 ]
 </script>
 

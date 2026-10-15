@@ -60,7 +60,7 @@ export function useProducts(): Product[] {
 }
 
 export function useProduct(slug: string): Product | undefined {
-  return allProducts.find((p) => p.slug === slug)
+  return allProducts.find((p) => p.slug === slug && p.published)
 }
 
 export function useFeaturedProducts(limit = 8): Product[] {

@@ -1,10 +1,18 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+
 const site = siteConfig
 const nav = [
   { label: 'Home', to: '/' },
   { label: 'Products', to: '/products' },
   { label: 'Contact', to: '/contact' },
 ]
+
+const mobileMenuOpen = ref(false)
+
+function closeMobileMenu() {
+  mobileMenuOpen.value = false
+}
 </script>
 
 <template>
@@ -56,13 +64,43 @@ const nav = [
           </NuxtLink>
         </nav>
 
-        <NuxtLink
-          to="/contact"
-          class="bg-sky-800 hover:bg-sky-700 text-white text-sm font-semibold px-4 py-2 rounded transition-colors"
-        >
-          Get a Quote
-        </NuxtLink>
+        <div class="flex items-center gap-3">
+          <NuxtLink
+            to="/contact"
+            class="bg-sky-800 hover:bg-sky-700 text-white text-sm font-semibold px-4 py-2 rounded transition-colors"
+          >
+            Get a Quote
+          </NuxtLink>
+          <!-- 移动端汉堡按钮 -->
+          <button
+            type="button"
+            class="md:hidden p-2 text-slate-700 hover:text-sky-800 transition-colors"
+            :aria-label="mobileMenuOpen ? 'Close menu' : 'Open menu'"
+            @click="mobileMenuOpen = !mobileMenuOpen"
+          >
+            <svg v-if="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg v-else class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
       </div>
+
+      <!-- 移动端展开菜单 -->
+      <nav v-if="mobileMenuOpen" class="md:hidden border-t border-slate-200 bg-white px-4 py-3 space-y-1">
+        <NuxtLink
+          v-for="item in nav"
+          :key="item.to"
+          :to="item.to"
+          class="block px-3 py-2 rounded text-slate-700 hover:bg-slate-100 font-medium transition-colors"
+          active-class="bg-sky-50 text-sky-800"
+          @click="closeMobileMenu"
+        >
+          {{ item.label }}
+        </NuxtLink>
+      </nav>
     </div>
   </header>
 </template>
