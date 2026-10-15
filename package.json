@@ -13,6 +13,7 @@
     "copy:cms": "node scripts/copy-sveltia-cms.mjs"
   },
   "dependencies": {
+    "@fontsource/material-symbols-outlined": "^5.3.9",
     "@nuxtjs/i18n": "^10.6.0",
     "@nuxtjs/seo": "^6.0.1",
     "@sveltia/cms": "^0.244.0",
