@@ -2,6 +2,20 @@
 
 面向海外客户的汽车配件询盘展示站（非电商），参考 glbtrad.com 结构。客户通过 Email / WhatsApp / 留资表单转化，无加购/下单/支付/登录。
 
+## 常用链接（运维必备）
+
+| 用途 | 链接 |
+|------|------|
+| 网站前台 | https://autoparts-site.pages.dev |
+| CMS 内容管理后台 | https://autoparts-site.pages.dev/admin/ |
+| GitHub 代码仓库 | https://github.com/wopishishen/autoparts-site |
+| Cloudflare Pages 控制台 | https://dash.cloudflare.com → 选账号 → Workers & Pages → autoparts-site |
+| Cloudflare 构建日志 | 同上 → 项目 → Deployments 标签 |
+| GitHub App 管理（CMS 登录用） | https://github.com/settings/apps/autoparts-site-cms |
+| Formspree 询盘表单（待注册） | https://formspree.io |
+| 本地开发前台 | http://localhost:3000 |
+| 本地 CMS 后台 | http://localhost:3000/admin/ |
+
 ## 技术栈
 
 | 层 | 选型 | 说明 |
