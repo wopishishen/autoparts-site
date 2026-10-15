@@ -25,5 +25,41 @@
   <script>
     CMS.registerLocale('zh_Hans', window.zh_Hans);
   </script>
+  <!-- 修复 Decap CMS 3.17.1 预览按钮点击无反应的 bug：
+       内置预览按钮的 window.open 逻辑在某些配置下不触发，这里用事件委托手动处理。 -->
+  <script>
+    (function() {
+      var PREVIEW_BASE = 'https://autoparts-site.pages.dev';
+      function getSlugFromUrl() {
+        var hash = window.location.hash || '';
+        var match = hash.match(/\/entries\/([^\/?#]+)/);
+        return match ? match[1] : null;
+      }
+      function getCollectionFromUrl() {
+        var hash = window.location.hash || '';
+        var match = hash.match(/\/collections\/([^\/]+)/);
+        return match ? match[1] : null;
+      }
+      function handlePreviewClick(e) {
+        var btn = e.target.closest('button');
+        if (!btn || btn.textContent.indexOf('预览') === -1) return;
+        var collection = getCollectionFromUrl();
+        var slug = getSlugFromUrl();
+        if (!slug) return;
+        var url;
+        if (collection === 'products') {
+          url = PREVIEW_BASE + '/products/' + slug;
+        } else if (collection === 'categories') {
+          url = PREVIEW_BASE + '/products?category=' + slug;
+        } else {
+          url = PREVIEW_BASE + '/';
+        }
+        window.open(url, '_blank');
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      document.addEventListener('click', handlePreviewClick, true);
+    })();
+  </script>
 </body>
 </html>
