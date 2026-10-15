@@ -26,5 +26,5 @@ Thumbs.db
 # Decap / CMS local state
 public/admin/credentials.json
 
-# Decap CMS 打包文件（由 postinstall 脚本自动从 node_modules 复制，不提交 git）
+# Sveltia CMS 打包文件（由 postinstall 脚本自动从 node_modules 复制，不提交 git）
 public/admin/vendor/

@@ -7,59 +7,7 @@
   <meta name="robots" content="noindex, nofollow" />
 </head>
 <body>
-  <!-- 修复 Decap CMS 3.17.1 bug：getFileSha 用 encodeURIComponent 编码子目录路径，把 / 变成 %2F，
-       导致 GitHub API extended SHA-1 语法 <branch>:<path> 返回 404，readFile catch 吞错返回空串，
-       最终 JSON.parse('') 报错。全局 patch 让 encodeURIComponent 不编码路径分隔符 /。 -->
-  <script>
-    (function() {
-      var orig = window.encodeURIComponent;
-      window.encodeURIComponent = function(str) {
-        return orig(str).replace(/%2F/g, '/');
-      };
-    })();
-  </script>
-  <!-- Decap CMS 管理后台入口（本地打包文件，不依赖外部 CDN） -->
-  <script src="./vendor/decap-cms.js"></script>
-  <!-- 简体中文语言包 -->
-  <script src="./vendor/zh_Hans.js"></script>
-  <script>
-    CMS.registerLocale('zh_Hans', window.zh_Hans);
-  </script>
-  <!-- 修复 Decap CMS 3.17.1 预览按钮点击无反应的 bug：
-       内置预览按钮的 window.open 逻辑在某些配置下不触发，这里用事件委托手动处理。 -->
-  <script>
-    (function() {
-      var PREVIEW_BASE = 'https://autoparts-site.pages.dev';
-      function getSlugFromUrl() {
-        var hash = window.location.hash || '';
-        var match = hash.match(/\/entries\/([^\/?#]+)/);
-        return match ? match[1] : null;
-      }
-      function getCollectionFromUrl() {
-        var hash = window.location.hash || '';
-        var match = hash.match(/\/collections\/([^\/]+)/);
-        return match ? match[1] : null;
-      }
-      function handlePreviewClick(e) {
-        var btn = e.target.closest('button');
-        if (!btn || btn.textContent.indexOf('预览') === -1) return;
-        var collection = getCollectionFromUrl();
-        var slug = getSlugFromUrl();
-        if (!slug) return;
-        var url;
-        if (collection === 'products') {
-          url = PREVIEW_BASE + '/products/' + slug;
-        } else if (collection === 'categories') {
-          url = PREVIEW_BASE + '/products?category=' + slug;
-        } else {
-          url = PREVIEW_BASE + '/';
-        }
-        window.open(url, '_blank');
-        e.stopPropagation();
-        e.preventDefault();
-      }
-      document.addEventListener('click', handlePreviewClick, true);
-    })();
-  </script>
+  <!-- Sveltia CMS 管理后台入口（本地打包文件，不依赖外部 CDN） -->
+  <script src="./vendor/sveltia/sveltia-cms.js"></script>
 </body>
 </html>

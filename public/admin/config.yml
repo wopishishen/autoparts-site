@@ -1,7 +1,7 @@
 # Decap CMS 配置 —— 汽车配件独立站内容管理
 
 # 界面语言：简体中文（运营人员使用）
-locale: zh_Hans
+locale: zh-CN
 
 # 预览链接前缀（编辑页"预览"按钮打开前端网站对应页面）
 preview_url: https://autoparts-site.pages.dev/
