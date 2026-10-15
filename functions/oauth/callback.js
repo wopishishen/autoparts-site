@@ -35,7 +35,7 @@ export async function onRequest(context) {
     return new Response(`Failed to get token: ${JSON.stringify(tokenData)}`, { status: 500 });
   }
 
-  // 返回 HTML，通过 postMessage 把 token 发给 Decap CMS 窗口
+  // 返回 HTML，通过 Decap CMS 两步握手协议回传 token
   const html = `<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"><title>Authorizing...</title></head>
@@ -44,23 +44,37 @@ export async function onRequest(context) {
 <script>
   (function() {
     var token = '${token}';
-    var payload = JSON.stringify({ token: token, provider: 'github' });
-    // 字符串格式（Netlify CMS 传统协议）
-    var strMsg = 'authorization:github:success:' + payload;
-    // 对象格式（Decap CMS 新协议）
-    var objMsg = { type: 'authorization', payload: { token: token, provider: 'github' } };
-    function send() {
+    var targetOrigin = 'https://autoparts-site.pages.dev';
+    var handshakeDone = false;
+
+    function sendSuccess() {
       if (window.opener && !window.opener.closed) {
-        window.opener.postMessage(strMsg, '*');
-        window.opener.postMessage(objMsg, '*');
+        var payload = JSON.stringify({ token: token, provider: 'github' });
+        window.opener.postMessage('authorization:github:success:' + payload, targetOrigin);
       }
+      setTimeout(function() { window.close(); }, 500);
     }
-    // 连续发送多次，确保 Decap CMS 收到
-    send();
-    setTimeout(send, 200);
-    setTimeout(send, 500);
-    // 延迟关闭，给 postMessage 留时间
-    setTimeout(function() { window.close(); }, 1000);
+
+    // 第二步：收到主窗口握手确认后，发送 token
+    window.addEventListener('message', function(e) {
+      if (e.data === 'authorizing:github' && !handshakeDone) {
+        handshakeDone = true;
+        sendSuccess();
+      }
+    });
+
+    // 第一步：发送握手消息
+    if (window.opener && !window.opener.closed) {
+      window.opener.postMessage('authorizing:github', targetOrigin);
+    }
+
+    // 容错：2 秒内没收到握手确认也直接发 token（兼容宽松实现）
+    setTimeout(function() {
+      if (!handshakeDone) {
+        handshakeDone = true;
+        sendSuccess();
+      }
+    }, 2000);
   })();
 </script>
 </body>
