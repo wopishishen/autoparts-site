@@ -12,10 +12,10 @@ preview_url: https://autoparts-site.pages.dev
 
 backend:
   name: github
-  repo: wopishishen/autoparts-site   # ← 推送前替换为你的 GitHub 账号/仓库名
+  repo: wopishishen/autoparts-site
   branch: main
-  # GitHub App 认证（Implicit Grant），无需自建 OAuth 服务器
-  app_id: 5333961
+  # GitHub App 认证：填 GitHub App 的 Client ID（不是数字 App ID）
+  app_id: Iv23liQ1kgu1mvZ4dFic
   auth_endpoint: https://github.com/login/oauth/authorize
   auth_scope: repo
 
