@@ -10,6 +10,8 @@ backend:
   name: github
   repo: wopishishen/autoparts-site
   branch: main
+  # 使用 GraphQL API（REST API 的 getFileSha 对含子目录路径有 encodeURIComponent bug，导致 404）
+  use_graphql: true
   # OAuth 代理（Cloudflare Pages Functions）
   base_url: https://autoparts-site.pages.dev
   auth_endpoint: /oauth/authenticate
