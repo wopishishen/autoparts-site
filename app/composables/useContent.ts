@@ -13,8 +13,13 @@ export const siteConfig: SiteConfig = (siteRaw && 'default' in siteRaw ? siteRaw
 
 // --- 分类 ---
 const categoryModules = import.meta.glob('../../content/categories/*.json', { eager: true })
-const categories: Category[] = Object.values(categoryModules)
-  .map((m) => ((m as { default?: Category }).default ?? m) as Category)
+const categories: Category[] = Object.entries(categoryModules)
+  .map(([path, m]) => {
+    const cat = ((m as { default?: Category }).default ?? m) as Category
+    // slug 以文件名为权威来源
+    const fileName = path.split('/').pop()?.replace(/\.json$/, '') ?? cat.slug
+    return { ...cat, slug: fileName }
+  })
   .sort((a, b) => a.name.localeCompare(b.name))
 
 export function useCategories(): Category[] {
@@ -34,14 +39,20 @@ function normalizeList(arr: unknown[], key: string): string[] {
   return arr.map((item) => (typeof item === 'string' ? item : (item as Record<string, string>)[key]))
 }
 
-const allProducts: Product[] = Object.values(productModules)
-  .map((m) => ((m as { default?: Product }).default ?? m) as Product)
-  .map((p) => ({
-    ...p,
-    images: normalizeList(p.images as unknown[], 'image'),
-    brands: normalizeList(p.brands as unknown[], 'brand'),
-    tags: normalizeList(p.tags as unknown[], 'tag'),
-  }))
+const allProducts: Product[] = Object.entries(productModules)
+  .map(([path, m]) => {
+    const product = ((m as { default?: Product }).default ?? m) as Product
+    // slug 以文件名（Git 路径）为权威来源，确保与 URL 路由一致
+    // 运营在 CMS 中误改 slug 字段不会导致 404
+    const fileName = path.split('/').pop()?.replace(/\.json$/, '') ?? product.slug
+    return {
+      ...product,
+      slug: fileName,
+      images: normalizeList(product.images as unknown[], 'image'),
+      brands: normalizeList(product.brands as unknown[], 'brand'),
+      tags: normalizeList(product.tags as unknown[], 'tag'),
+    }
+  })
   .sort((a, b) => a.name.localeCompare(b.name))
 
 export function useProducts(): Product[] {
