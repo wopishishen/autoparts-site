@@ -1,0 +1,17 @@
+{
+  "title": "Brake System Maintenance: Extending the Life of Your Bus Brake Pads",
+  "slug": "brake-system-maintenance-extending-bus-brake-pad-life",
+  "category": "technical-articles",
+  "coverImage": "/images/categories/brake-parts.jpg",
+  "summary": "Brake pads are one of the highest-consumption parts in bus operations. Proper maintenance habits can extend pad life by 30-50% and significantly reduce operating costs.",
+  "content": "## Understanding Brake Wear\n\nBus brake pads endure extreme conditions — frequent stops, heavy loads, and varying road conditions. A typical urban bus may replace brake pads every 30,000-50,000 km, but poor driving habits can cut that in half.\n\n## Factors That Accelerate Wear\n\n### Driving Style\n- **Hard braking** generates excessive heat, glazing the pad surface\n- **Riding the brake** keeps pads in constant contact\n- **High-speed stops** increase friction energy dramatically\n\n### Environmental Conditions\n- **Mountainous routes** require more braking\n- **Wet conditions** reduce pad friction efficiency\n- **Dusty roads** cause abrasive wear\n\n### Vehicle Load\n- Overloaded buses put extra stress on brakes\n- Uneven load distribution causes uneven pad wear\n\n## Maintenance Best Practices\n\n### 1. Regular Inspection\n\nCheck brake pads every 10,000 km:\n- Measure pad thickness (replace at 3mm remaining)\n- Look for uneven wear patterns\n- Check for cracks or glazing\n- Inspect rotors for scoring\n\n### 2. Proper Bedding-In\n\nNew brake pads need a proper bedding procedure:\n1. Drive at 60 km/h, brake moderately to 20 km/h\n2. Repeat 5-6 times with 30-second cooling intervals\n3. Avoid hard stops for the first 200 km\n\n### 3. Quality Parts Selection\n\nChoose brake pads with:\n- Semi-metallic or ceramic formulation for heavy-duty use\n- OE-equivalent or better friction coefficient\n- Proper shims and hardware to prevent noise\n\n### 4. System-Level Approach\n\nDon't just replace pads — inspect the entire system:\n- Calipers: ensure free sliding movement\n- Rotors: measure thickness and runout\n- Brake fluid: flush every 2 years\n- Hoses: check for bulges or leaks\n\n## Cost Savings Calculation\n\nIf a fleet of 50 buses averages 4 pad sets per year at $80/set:\n- Current annual cost: $16,000\n- With 30% life extension: $11,200\n- Annual savings: **$4,800**\n\nPlus reduced labor costs and less downtime.\n\n## Conclusion\n\nBrake pad life is largely within your control. Combine driver training, regular inspections, and quality parts to achieve maximum value from your brake system investment.",
+  "author": "Technical Team",
+  "date": "2026-08-20",
+  "featured": false,
+  "published": true,
+  "tags": ["brake-parts", "maintenance", "cost-saving"],
+  "seo": {
+    "title": "Brake System Maintenance: Extend Bus Brake Pad Life | Technical Guide",
+    "description": "Learn how proper maintenance habits can extend bus brake pad life by 30-50%. Includes inspection schedules, bedding procedures, and cost savings calculations."
+  }
+}

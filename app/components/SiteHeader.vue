@@ -5,6 +5,7 @@ const site = siteConfig
 const nav = [
   { label: 'Home', to: '/' },
   { label: 'Products', to: '/products' },
+  { label: 'Blog', to: '/blog' },
   { label: 'Contact', to: '/contact' },
 ]
 

@@ -119,6 +119,51 @@ collections:
           - { label: "页面标题", name: title, widget: string, required: false }
           - { label: "页面描述", name: description, widget: text, required: false }
 
+  - name: blog
+    label: 博客管理
+    label_singular: 文章
+    folder: content/blog
+    extension: json
+    format: json
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    summary: "{{title}}"
+    identifier_field: title
+    sortable_fields: [date, published, featured]
+    preview_path: /blog/{{slug}}
+    fields:
+      - { label: "Slug（URL 标识，小写连字符）", name: slug, widget: string, hint: "文章详情页 URL：/blog/<slug>" }
+      - { label: "文章标题", name: title, widget: string }
+      - label: "文章分类"
+        name: category
+        widget: select
+        options:
+          - { label: 行业新闻, value: industry-news }
+          - { label: 公司动态, value: company-news }
+          - { label: 技术文章, value: technical-articles }
+          - { label: 采购指南, value: guides }
+      - { label: "封面图", name: coverImage, widget: image, required: false }
+      - { label: "摘要（列表页显示）", name: summary, widget: text, required: false }
+      - { label: "正文（Markdown）", name: content, widget: markdown }
+      - { label: "作者", name: author, widget: string, required: false }
+      - { label: "发布日期", name: date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "精选推荐", name: featured, widget: boolean, default: false }
+      - { label: "发布显示", name: published, widget: boolean, default: true }
+      - label: "标签"
+        name: tags
+        widget: list
+        fields:
+          - { label: 标签, name: tag, widget: string }
+        required: false
+      - label: "SEO 优化"
+        name: seo
+        widget: object
+        required: false
+        fields:
+          - { label: "页面标题（留空则用文章标题）", name: title, widget: string, required: false }
+          - { label: "页面描述（留空则用摘要）", name: description, widget: text, required: false }
+
   - name: site
     label: 站点设置
     files:

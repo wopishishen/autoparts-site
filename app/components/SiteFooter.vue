@@ -3,6 +3,7 @@ const site = siteConfig
 const quickLinks = [
   { label: 'Home', to: '/' },
   { label: 'Products', to: '/products' },
+  { label: 'Blog', to: '/blog' },
   { label: 'Contact Us', to: '/contact' },
   { label: 'Content Manager', to: '/admin/' },
 ]

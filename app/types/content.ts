@@ -47,3 +47,21 @@ export interface Product {
     description?: string
   }
 }
+
+export interface BlogPost {
+  slug: string
+  title: string
+  category: string
+  coverImage?: string
+  summary?: string
+  content: string
+  author?: string
+  date: string
+  featured?: boolean
+  published?: boolean
+  tags?: string[]
+  seo?: {
+    title?: string
+    description?: string
+  }
+}
