@@ -53,8 +53,8 @@ async function onSubmit() {
       throw new Error(data.error || 'Submission failed')
     }
     submitted.value = true
-  } catch (err: any) {
-    submitError.value = err.message || 'Something went wrong, please try again.'
+  } catch {
+    submitError.value = 'Failed to send your inquiry. Please try again later or email us directly.'
   } finally {
     submitting.value = false
   }

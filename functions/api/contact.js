@@ -121,7 +121,9 @@ export async function onRequestPost(context) {
     if (data.statusCode === 200) {
       return Response.json({ ok: true })
     }
-    return Response.json({ ok: false, error: data.message || 'Send failed' }, { status: 502 })
+    // 不透传 SendCloud 的中文错误信息，返回通用英文错误
+    console.error('SendCloud error:', JSON.stringify(data))
+    return Response.json({ ok: false, error: 'Email service error' }, { status: 502 })
   } catch (err) {
     return Response.json({ ok: false, error: 'SendCloud request failed' }, { status: 502 })
   }
