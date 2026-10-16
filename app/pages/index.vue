@@ -13,6 +13,8 @@ const categoryNames: Record<string, string> = {
 
 // 产品分类 tab 切换
 const activeCategory = ref(categories[0]?.slug || '')
+// 横向滚动 Tab：选中项滚动到可视区域居中（通用能力）
+const { setRef: setCatTabRef } = useTabScrollCenter(activeCategory)
 
 // Hero Banner 轮播图
 const heroSlides = [
@@ -88,18 +90,29 @@ const stats = [
           subtitle="Our products cover the whole complete vehicle, including Engine Parts, Gearbox Parts, Chassis Parts, Body Parts, Brake Parts and Electric Parts."
         />
         <div class="flex flex-col md:flex-row gap-0">
-          <!-- 左侧分类导航 -->
-          <div class="md:w-56 flex-shrink-0 border border-slate-200">
-            <button
-              v-for="cat in categories"
-              :key="cat.slug"
-              type="button"
-              class="w-full px-5 py-3.5 text-left border-b border-slate-100 last:border-b-0 transition-colors text-sm font-medium"
-              :class="activeCategory === cat.slug ? 'bg-sky-800 text-white' : 'text-slate-700 hover:bg-slate-50'"
-              @click="activeCategory = cat.slug"
-            >
-              {{ cat.name }}
-            </button>
+          <!-- 分类导航：mobile 横向滚动 pill，桌面恢复纵向导航 -->
+          <div class="md:w-56 flex-shrink-0 min-w-0 md:border md:border-slate-200">
+            <!-- mobile：纯文字 Tab，选中项紧贴文字的下划线（无边框/无背景/无滚动条）；桌面：恢复纵向导航 -->
+            <div class="flex gap-6 sm:gap-8 overflow-x-auto no-scrollbar md:flex-col md:gap-0 md:overflow-visible">
+              <button
+                v-for="cat in categories"
+                :key="cat.slug"
+                :ref="setCatTabRef(cat.slug)"
+                type="button"
+                class="flex-shrink-0 whitespace-nowrap py-2 text-sm font-medium transition-colors md:w-full md:px-5 md:py-3.5 md:text-left md:hover:bg-slate-50"
+                :class="activeCategory === cat.slug ? 'md:bg-sky-800' : ''"
+                @click="activeCategory = cat.slug"
+              >
+                <span
+                  class="inline-block pb-1 border-b-2"
+                  :class="activeCategory === cat.slug
+                    ? 'border-sky-800 text-sky-800 md:border-transparent md:text-white'
+                    : 'border-transparent text-slate-600 hover:text-slate-800 md:text-slate-700'"
+                >
+                  {{ cat.name }}
+                </span>
+              </button>
+            </div>
           </div>
           <!-- 右侧大图 —— 保持原始 1.64:1 比例，整张图可点击 -->
           <div class="flex-1 bg-slate-100">
@@ -172,12 +185,14 @@ const stats = [
     <!-- 解决方案 —— 4列全屏大图分栏，文字叠加 -->
     <Reveal>
     <section id="solution" class="py-14 bg-white">
-      <SectionHeader
-        align="center"
-        eyebrow="Our Solution"
-        title="SOLUTION"
-        subtitle="Serving global public travel is our unremitting pursuit. We always believe that efficient and high-quality pre-sale, sale, after-sales service can create greater value for customers."
-      />
+      <div class="max-w-7xl mx-auto px-4">
+        <SectionHeader
+          align="center"
+          eyebrow="Our Solution"
+          title="SOLUTION"
+          subtitle="Serving global public travel is our unremitting pursuit. We always believe that efficient and high-quality pre-sale, sale, after-sales service can create greater value for customers."
+        />
+      </div>
       <div class="grid grid-cols-2 lg:grid-cols-4">
         <NuxtLink
           v-for="sol in solutions"
@@ -187,7 +202,8 @@ const stats = [
         >
           <img :src="sol.image" :alt="sol.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
           <div class="absolute inset-0 bg-slate-900/50 group-hover:bg-slate-900/40 transition-colors"></div>
-          <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-5">
+          <!-- 文字左右安全距离：移动端加大内边距，桌面保持 -->
+          <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-6 md:px-5">
             <h3 class="font-bold text-white text-lg mb-2">{{ sol.title }}</h3>
             <p class="text-xs text-slate-200 leading-relaxed line-clamp-3">{{ sol.text }}</p>
           </div>

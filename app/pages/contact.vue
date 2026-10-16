@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 const route = useRoute()
 const site = siteConfig
@@ -13,30 +13,51 @@ const form = ref({
   country: '',
   product: prefillProduct.value,
   message: '',
-  website: '', // honeypot 反垃圾
+  website: '', // honeypot 反垃圾（隐藏字段，机器人会填）
 })
 
 const submitted = ref(false)
+const submitting = ref(false)
+const submitError = ref('')
+const formLoadedAt = ref(0)
+const { fingerprint } = useFingerprint()
+
+onMounted(() => {
+  formLoadedAt.value = Date.now()
+})
 
 useSeoMeta({
   title: 'Contact Us',
   description: 'Contact our sales team for quotes, wholesale prices and customized parts solutions. We reply within 24 hours.',
 })
 
-// TODO(表单方案待定)：当前为 Formspree 占位 ID，需注册 formspree.io 后替换为真实 ID；
-// 提交机制（跳转感谢页 / AJAX 留站）随方案确定后一并处理。
-// 真实联系方式（tel/email/whatsapp/address）上线前需在 content/site.json 替换占位值。
-const formAction = 'https://formspree.io/f/YOUR_FORM_ID'
-
 const whatsappLink = computed(() => `https://wa.me/${site.contact.whatsapp.replace(/[^0-9]/g, '')}`)
 
 async function onSubmit() {
-  if (form.value.website) return // honeypot 命中，静默丢弃
-  // 原生提交到 Formspree（POST 后浏览器跳转感谢页）
-  submitted.value = true
-  await nextTick()
-  const el = document.querySelector<HTMLFormElement>('#inquiry-form')
-  el?.submit()
+  if (submitting.value) return
+  submitting.value = true
+  submitError.value = ''
+
+  try {
+    const resp = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...form.value,
+        formLoadedAt: formLoadedAt.value,
+        fingerprint: fingerprint.value,
+      }),
+    })
+    const data = await resp.json().catch(() => ({}))
+    if (!resp.ok || !data.ok) {
+      throw new Error(data.error || 'Submission failed')
+    }
+    submitted.value = true
+  } catch (err: any) {
+    submitError.value = err.message || 'Something went wrong, please try again.'
+  } finally {
+    submitting.value = false
+  }
 }
 </script>
 
@@ -62,8 +83,8 @@ async function onSubmit() {
     <div class="grid gap-8 lg:grid-cols-[1fr_320px] mt-2">
       <!-- 表单 -->
       <div v-if="!submitted" class="bg-white border border-slate-200 rounded-lg p-6">
-        <form id="inquiry-form" :action="formAction" method="POST" @submit.prevent="onSubmit">
-          <!-- honeypot -->
+        <form id="inquiry-form" @submit.prevent="onSubmit">
+          <!-- honeypot：隐藏字段，机器人会自动填 -->
           <input v-model="form.website" type="text" name="_gotcha" class="hidden" tabindex="-1" autocomplete="off">
 
           <div class="grid gap-4 sm:grid-cols-3">
@@ -99,12 +120,14 @@ async function onSubmit() {
               class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-800"
             ></textarea>
           </div>
+          <div v-if="submitError" class="mt-3 text-sm text-red-600">{{ submitError }}</div>
           <div class="mt-5">
             <button
               type="submit"
-              class="bg-sky-800 hover:bg-sky-700 text-white font-semibold px-8 py-3 rounded transition-colors"
+              :disabled="submitting"
+              class="bg-sky-800 hover:bg-sky-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold px-8 py-3 rounded transition-colors"
             >
-              Send Inquiry
+              {{ submitting ? 'Sending...' : 'Send Inquiry' }}
             </button>
           </div>
         </form>

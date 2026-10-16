@@ -109,6 +109,10 @@ body {
   font-weight: 600;
 }
 
+/* 隐藏横向滚动条（横向 Tab / 分类条专用，视觉保持干净） */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
 /* —— 滚动渐入动效（IntersectionObserver 触发；克制使用，仅适合的元素才包裹 Reveal） —— */
 .reveal {
   opacity: 0;

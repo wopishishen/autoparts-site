@@ -67,24 +67,24 @@ withDefaults(defineProps<{
   aspect-ratio: 1;
   top: -50%;
   right: -15%;
-  background: radial-gradient(circle, rgba(34, 211, 238, 0.55), transparent 70%);
-  animation: cta-glow-a 7s ease-in-out infinite alternate;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.80), transparent 70%);
+  animation: cta-glow-a 2s ease-in-out infinite alternate;
 }
 .cta-glow-b {
   width: 50%;
   aspect-ratio: 1;
   bottom: -60%;
   left: -10%;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.5), transparent 70%);
-  animation: cta-glow-b 9s ease-in-out infinite alternate;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.75), transparent 70%);
+  animation: cta-glow-b 2.5s ease-in-out infinite alternate;
 }
 @keyframes cta-glow-a {
-  0%   { transform: translate3d(0, 0, 0) scale(1);    opacity: 0.75; }
-  100% { transform: translate3d(-25%, 22%, 0) scale(1.4); opacity: 1; }
+  0%   { transform: translate3d(0, 0, 0) scale(1);    opacity: 0.85; }
+  100% { transform: translate3d(-40%, 35%, 0) scale(1.7); opacity: 1; }
 }
 @keyframes cta-glow-b {
-  0%   { transform: translate3d(0, 0, 0) scale(1);    opacity: 0.6; }
-  100% { transform: translate3d(28%, -22%, 0) scale(1.35); opacity: 1; }
+  0%   { transform: translate3d(0, 0, 0) scale(1);    opacity: 0.7; }
+  100% { transform: translate3d(45%, -35%, 0) scale(1.6); opacity: 1; }
 }
 
 /* —— 背景光整体流动（多色光斑碰撞，非带状扫过） —— */
@@ -92,12 +92,12 @@ withDefaults(defineProps<{
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(40% 48% at 25% 40%, rgba(34, 211, 238, 0.40), transparent 65%),
-    radial-gradient(36% 44% at 75% 60%, rgba(139, 92, 246, 0.36), transparent 65%),
-    radial-gradient(28% 36% at 50% 28%, rgba(236, 72, 153, 0.24), transparent 65%),
-    radial-gradient(30% 40% at 60% 75%, rgba(59, 130, 246, 0.32), transparent 65%);
+    radial-gradient(40% 48% at 25% 40%, rgba(34, 211, 238, 0.65), transparent 65%),
+    radial-gradient(36% 44% at 75% 60%, rgba(139, 92, 246, 0.60), transparent 65%),
+    radial-gradient(28% 36% at 50% 28%, rgba(236, 72, 153, 0.45), transparent 65%),
+    radial-gradient(30% 40% at 60% 75%, rgba(59, 130, 246, 0.50), transparent 65%);
   background-size: 240% 240%, 220% 220%, 200% 200%, 260% 260%;
-  animation: cta-flow 14s ease-in-out infinite alternate;
+  animation: cta-flow 3.5s ease-in-out infinite alternate;
   will-change: background-position;
 }
 @keyframes cta-flow {

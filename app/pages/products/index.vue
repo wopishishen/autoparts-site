@@ -9,6 +9,9 @@ const PAGE_SIZE = 12
 
 const activeCategory = computed(() => (route.query.category as string) || 'all')
 
+// 横向滚动 Tab：选中项滚动到可视区域居中（通用能力）
+const { setRef: setCatTabRef } = useTabScrollCenter(activeCategory)
+
 const filteredProducts = computed(() => {
   if (activeCategory.value === 'all') return allProducts
   return allProducts.filter((p) => p.category === activeCategory.value)
@@ -58,23 +61,26 @@ useSeoMeta({
     <div class="max-w-7xl mx-auto px-4 pt-8 pb-10">
       <div class="grid gap-8 lg:grid-cols-[240px_1fr] mt-2">
         <!-- 侧栏分类 -->
-        <aside class="lg:border-r lg:border-slate-200 lg:pr-6">
+        <aside class="lg:border-r lg:border-slate-200 lg:pr-6 min-w-0">
           <h2 class="font-semibold text-slate-900 mb-3">Product Category</h2>
-          <ul class="space-y-1">
-            <li>
+          <!-- mobile 横向滚动分类条；桌面恢复纵向侧栏 -->
+          <ul class="flex gap-2 overflow-x-auto no-scrollbar pb-1 lg:flex-col lg:gap-1 lg:overflow-visible lg:pb-0">
+            <li class="flex-shrink-0 lg:w-full">
               <NuxtLink
+                :ref="setCatTabRef('all')"
                 to="/products"
-                class="block px-3 py-2 rounded text-sm transition-colors"
-                :class="activeCategory === 'all' ? 'bg-sky-800 text-white font-medium' : 'text-slate-700 hover:bg-slate-100'"
+                class="block px-4 py-2 rounded-full border lg:rounded lg:border-0 whitespace-nowrap text-sm transition-colors"
+                :class="activeCategory === 'all' ? 'bg-sky-800 text-white font-medium' : 'text-slate-700 hover:bg-slate-100 border-slate-200'"
               >
                 All Products
               </NuxtLink>
             </li>
-            <li v-for="cat in categories" :key="cat.slug">
+            <li v-for="cat in categories" :key="cat.slug" class="flex-shrink-0 lg:w-full">
               <NuxtLink
+                :ref="setCatTabRef(cat.slug)"
                 :to="`/products?category=${cat.slug}`"
-                class="block px-3 py-2 rounded text-sm transition-colors"
-                :class="activeCategory === cat.slug ? 'bg-sky-800 text-white font-medium' : 'text-slate-700 hover:bg-slate-100'"
+                class="block px-4 py-2 rounded-full border lg:rounded lg:border-0 whitespace-nowrap text-sm transition-colors"
+                :class="activeCategory === cat.slug ? 'bg-sky-800 text-white font-medium' : 'text-slate-700 hover:bg-slate-100 border-slate-200'"
               >
                 {{ cat.name }}
               </NuxtLink>
