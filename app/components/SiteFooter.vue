@@ -12,8 +12,14 @@ const quickLinks = [
 </script>
 
 <template>
-  <footer class="bg-slate-900 text-slate-300">
-    <div class="max-w-7xl mx-auto px-4 py-10 grid gap-8 md:grid-cols-3">
+  <footer class="relative bg-slate-900 text-slate-300 overflow-hidden">
+    <!-- 世界地图点阵背景（Canvas 渲染 + 万家灯火动效；ClientOnly 确保客户端挂载） -->
+    <div class="map-bg opacity-60 pointer-events-none">
+      <ClientOnly>
+        <WorldMapDots />
+      </ClientOnly>
+    </div>
+    <div class="relative z-10 max-w-7xl mx-auto px-4 py-10 grid gap-8 md:grid-cols-3">
       <!-- 公司简介 -->
       <div>
         <div class="font-bold text-white text-lg mb-3">{{ site.brandName }}</div>
@@ -62,10 +68,18 @@ const quickLinks = [
         </ul>
       </div>
     </div>
-    <div class="border-t border-slate-800">
+    <div class="relative z-10 border-t border-slate-800">
       <div class="max-w-7xl mx-auto px-4 py-4 text-xs text-slate-500">
         © {{ new Date().getFullYear() }} {{ site.companyName }}. All rights reserved.
       </div>
     </div>
   </footer>
 </template>
+
+<style scoped>
+/* 点阵背景铺满整个 Footer；Canvas 绘制使用 slice/cover 裁切语义，像 cover 背景图一样填满容器 */
+.map-bg {
+  position: absolute;
+  inset: 0;
+}
+</style>

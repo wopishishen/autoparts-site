@@ -99,8 +99,10 @@ const stats = [
                 :key="cat.slug"
                 :ref="setCatTabRef(cat.slug)"
                 type="button"
-                class="flex-shrink-0 whitespace-nowrap py-2 text-sm font-medium transition-colors md:w-full md:px-5 md:py-3.5 md:text-left md:hover:bg-slate-50"
-                :class="activeCategory === cat.slug ? 'md:bg-sky-800' : ''"
+                class="flex-shrink-0 whitespace-nowrap py-2 text-sm font-medium transition-colors md:w-full md:px-5 md:py-3.5 md:text-left"
+                :class="activeCategory === cat.slug
+                  ? 'md:bg-sky-800'
+                  : 'md:hover:bg-slate-50'"
                 @click="activeCategory = cat.slug"
               >
                 <span
