@@ -62,8 +62,9 @@ useHead({
   ],
 })
 
-const whatsappLink = computed(() => `https://wa.me/${site.contact.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello, I am interested in: ${product!.name}`)}`)
-const emailLink = computed(() => `mailto:${site.contact.email}?subject=${encodeURIComponent(`Inquiry: ${product!.name}`)}`)
+const { emailLink, whatsappLink } = useContactLinks()
+const productWhatsappLink = computed(() => whatsappLink(`Hello, I am interested in: ${product!.name}`))
+const productEmailLink = computed(() => emailLink(`Inquiry: ${product!.name}`))
 const quoteLink = computed(() => `/contact?product=${encodeURIComponent(product!.name)}`)
 
 function formatTag(tag: string): string {
@@ -127,11 +128,11 @@ function formatTag(tag: string): string {
             <NuxtLink :to="quoteLink" class="col-span-2 sm:col-span-1 text-center bg-sky-800 hover:bg-sky-700 text-white font-semibold px-6 py-3 rounded transition-colors">
               Quote Now
             </NuxtLink>
-            <a :href="emailLink" class="text-center border border-slate-300 hover:border-sky-800 hover:text-sky-800 font-semibold px-6 py-3 rounded transition-colors">
+            <a :href="productEmailLink" class="text-center border border-slate-300 hover:border-sky-800 hover:text-sky-800 font-semibold px-6 py-3 rounded transition-colors">
               Send Email
             </a>
             <a
-              :href="whatsappLink"
+              :href="productWhatsappLink"
               target="_blank"
               rel="noopener"
               class="inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1DA851] text-white font-semibold px-6 py-3 rounded transition-colors"

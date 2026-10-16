@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const site = siteConfig
+const { defaultEmailLink, defaultWhatsappLink } = useContactLinks()
 const showTop = ref(false)
 
 function handleScroll() {
@@ -20,8 +21,8 @@ onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
 })
 
-const whatsappLink = `https://wa.me/${site.contact.whatsapp.replace(/[^0-9]/g, '')}`
-const mailLink = `mailto:${site.contact.email}`
+const whatsappLink = defaultWhatsappLink
+const mailLink = defaultEmailLink
 </script>
 
 <template>

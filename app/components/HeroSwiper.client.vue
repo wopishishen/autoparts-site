@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full bg-slate-100">
+  <div class="relative w-full bg-slate-100 aspect-[1920/780]">
     <Swiper
       :modules="modules"
       :slides-per-view="1"
@@ -7,10 +7,10 @@
       :autoplay="{ delay: 5000, disableOnInteraction: false }"
       :pagination="{ clickable: true }"
       @swiper="onSwiper"
-      class="hero-swiper"
+      class="hero-swiper h-full"
     >
       <SwiperSlide v-for="(slide, i) in slides" :key="i">
-        <img :src="slide" :alt="`Banner ${i + 1}`" class="w-full h-auto object-cover">
+        <img :src="slide" :alt="`Banner ${i + 1}`" class="w-full h-full object-cover">
       </SwiperSlide>
     </Swiper>
 
