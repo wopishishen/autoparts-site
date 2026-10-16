@@ -210,9 +210,9 @@ const stats = [
             v-for="post in featuredPosts"
             :key="post.slug"
             :to="`/news/${post.slug}`"
-            class="group flex gap-5 items-center bg-slate-50 rounded overflow-hidden hover:bg-slate-100 transition-colors"
+            class="group flex gap-5 py-3 md:py-4 bg-slate-50 rounded overflow-hidden hover:bg-slate-100 transition-colors"
           >
-            <div class="w-28 md:w-64 flex-shrink-0 aspect-[3/2] bg-slate-200 overflow-hidden">
+            <div class="w-32 sm:w-48 h-24 sm:h-32 flex-shrink-0 bg-slate-200 rounded overflow-hidden">
               <img
                 v-if="post.coverImage"
                 :src="post.coverImage"
@@ -221,7 +221,7 @@ const stats = [
                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               >
             </div>
-            <div class="flex-1 py-3 md:py-4 pr-3 md:pr-5">
+            <div class="flex-1 min-w-0 pr-3 md:pr-5">
               <div class="flex items-center gap-3 text-xs text-slate-500 mb-1.5">
                 <span class="bg-sky-100 text-sky-800 px-2 py-0.5 rounded font-medium">{{ categoryNames[post.category] || post.category }}</span>
                 <span>{{ new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) }}</span>

@@ -9,7 +9,7 @@ const quoteUrl = (name: string) => `/contact?product=${encodeURIComponent(name)}
 </script>
 
 <template>
-  <div class="group flex flex-col">
+  <div class="group flex flex-col h-full">
     <!-- 图片 —— 1.34:1 比例，匹配参考站产品图 -->
     <NuxtLink :to="`/products/${product.slug}`" :aria-label="`View ${product.name} details`" class="block aspect-[550/410] bg-slate-100 overflow-hidden rounded-lg">
       <img
@@ -17,7 +17,7 @@ const quoteUrl = (name: string) => `/contact?product=${encodeURIComponent(name)}
         :src="product.images[0]"
         :alt="product.name"
         loading="lazy"
-        class="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+        class="w-full h-full object-contain"
       >
       <div v-else class="w-full h-full flex items-center justify-center text-slate-400 text-sm font-medium">
         {{ product.name }}
