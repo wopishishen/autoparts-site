@@ -8,10 +8,8 @@ const site = siteConfig
 const prefillProduct = ref(typeof route.query.product === 'string' ? route.query.product : '')
 
 const form = ref({
-  name: '',
   email: '',
   phone: '',
-  whatsapp: '',
   country: '',
   product: prefillProduct.value,
   message: '',
@@ -21,11 +19,13 @@ const form = ref({
 const submitted = ref(false)
 
 useSeoMeta({
-  title: 'Contact Us - Auto Parts Supplier',
+  title: 'Contact Us',
   description: 'Contact our sales team for quotes, wholesale prices and customized parts solutions. We reply within 24 hours.',
 })
 
-// TODO: 部署前替换为真实 Formspree 表单 ID（https://formspree.io 免费注册）
+// TODO(表单方案待定)：当前为 Formspree 占位 ID，需注册 formspree.io 后替换为真实 ID；
+// 提交机制（跳转感谢页 / AJAX 留站）随方案确定后一并处理。
+// 真实联系方式（tel/email/whatsapp/address）上线前需在 content/site.json 替换占位值。
 const formAction = 'https://formspree.io/f/YOUR_FORM_ID'
 
 const whatsappLink = computed(() => `https://wa.me/${site.contact.whatsapp.replace(/[^0-9]/g, '')}`)
@@ -41,32 +41,32 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto px-4 py-8">
+  <div>
+    <!-- 子页面纯图 Banner -->
+    <SubBanner image="/images/banners/d_images_sub_banner_contact.jpg" />
+
     <!-- 面包屑 -->
-    <nav class="text-sm text-slate-500 mb-6">
-      <NuxtLink to="/" class="hover:text-sky-800">Home</NuxtLink>
-      <span class="mx-2">›</span>
-      <span class="text-slate-800">Contact Us</span>
-    </nav>
+    <Breadcrumb
+      :items="[
+        { label: 'Home', to: '/' },
+        { label: 'Contact Us' },
+      ]"
+    />
 
-    <h1 class="text-2xl font-bold text-slate-900 mb-2">Contact Us</h1>
-    <p class="text-slate-600 mb-8">Leave your inquiry and our sales team will get back to you within 24 hours.</p>
-
-    <div class="grid gap-8 lg:grid-cols-[1fr_320px]">
+    <div class="max-w-7xl mx-auto px-4 pt-8 pb-10">
+      <PageTitle
+        title="Contact Us"
+        subtitle="Get a quote or ask about our parts — our team usually replies within 24 hours."
+      />
+    <Reveal>
+    <div class="grid gap-8 lg:grid-cols-[1fr_320px] mt-2">
       <!-- 表单 -->
       <div v-if="!submitted" class="bg-white border border-slate-200 rounded-lg p-6">
         <form id="inquiry-form" :action="formAction" method="POST" @submit.prevent="onSubmit">
           <!-- honeypot -->
           <input v-model="form.website" type="text" name="_gotcha" class="hidden" tabindex="-1" autocomplete="off">
 
-          <div class="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label for="name" class="block text-sm font-medium text-slate-700 mb-1">Your Name *</label>
-              <input
-                id="name" v-model="form.name" name="name" type="text" required
-                class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-800"
-              >
-            </div>
+          <div class="grid gap-4 sm:grid-cols-3">
             <div>
               <label for="email" class="block text-sm font-medium text-slate-700 mb-1">E-mail *</label>
               <input
@@ -82,40 +82,31 @@ async function onSubmit() {
               >
             </div>
             <div>
-              <label for="whatsapp" class="block text-sm font-medium text-slate-700 mb-1">WhatsApp</label>
+              <label for="country" class="block text-sm font-medium text-slate-700 mb-1">Country *</label>
               <input
-                id="whatsapp" v-model="form.whatsapp" name="whatsapp" type="text"
-                class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-800"
-              >
-            </div>
-            <div>
-              <label for="country" class="block text-sm font-medium text-slate-700 mb-1">Country</label>
-              <input
-                id="country" v-model="form.country" name="country" type="text"
-                class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-800"
-              >
-            </div>
-            <div>
-              <label for="product" class="block text-sm font-medium text-slate-700 mb-1">Product of Interest</label>
-              <input
-                id="product" v-model="form.product" name="product" type="text"
+                id="country" v-model="form.country" name="country" type="text" required
                 class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-800"
               >
             </div>
           </div>
+          <!-- 商品预填（隐藏，从商品页 Quote Now 跳转时自动带上） -->
+          <input v-model="form.product" name="product" type="hidden">
           <div class="mt-4">
-            <label for="message" class="block text-sm font-medium text-slate-700 mb-1">Message *</label>
+            <label for="message" class="block text-sm font-medium text-slate-700 mb-1">Your Message *</label>
             <textarea
-              id="message" v-model="form.message" name="message" rows="5" required
+              id="message" v-model="form.message" name="message" rows="6" required
+              placeholder="Product name / model / quantity ..."
               class="w-full border border-slate-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-800"
             ></textarea>
           </div>
-          <button
-            type="submit"
-            class="mt-5 bg-sky-800 hover:bg-sky-700 text-white font-semibold px-6 py-3 rounded transition-colors"
-          >
-            Send Inquiry
-          </button>
+          <div class="mt-5">
+            <button
+              type="submit"
+              class="bg-sky-800 hover:bg-sky-700 text-white font-semibold px-8 py-3 rounded transition-colors"
+            >
+              Send Inquiry
+            </button>
+          </div>
         </form>
       </div>
       <div v-else class="bg-slate-50 border border-slate-200 rounded-lg p-8 text-center">
@@ -124,32 +115,44 @@ async function onSubmit() {
       </div>
 
       <!-- 联系方式 -->
-      <aside class="bg-sky-900 text-white rounded-lg p-6 h-fit">
-        <h2 class="font-semibold text-lg mb-4">Contact Information</h2>
-        <ul class="space-y-3 text-sm">
-          <li>
-            <span class="block text-sky-300 text-xs mb-0.5">Tel</span>
-            <a :href="`tel:${site.contact.tel.replace(/\s/g, '')}`" class="hover:underline">{{ site.contact.tel }}</a>
+      <aside class="theme-flow-bg relative overflow-hidden text-white rounded-lg p-6 h-fit">
+        <FlowBackground />
+        <div class="relative z-10">
+          <h2 class="font-semibold text-lg mb-4">Contact Information</h2>
+          <ul class="space-y-3 text-sm">
+          <li class="flex items-start gap-2.5">
+            <svg class="w-4 h-4 mt-0.5 text-sky-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+            <div>
+              <span class="block text-sky-300 text-xs mb-0.5">Tel</span>
+              <a :href="`tel:${site.contact.tel.replace(/[^0-9+]/g, '')}`" class="hover:underline">{{ site.contact.tel }}</a>
+            </div>
           </li>
-          <li>
-            <span class="block text-sky-300 text-xs mb-0.5">E-mail</span>
-            <a :href="`mailto:${site.contact.email}`" class="hover:underline break-all">{{ site.contact.email }}</a>
+          <li class="flex items-start gap-2.5">
+            <svg class="w-4 h-4 mt-0.5 text-sky-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+            <div>
+              <span class="block text-sky-300 text-xs mb-0.5">E-mail</span>
+              <a :href="`mailto:${site.contact.email}`" class="hover:underline break-all">{{ site.contact.email }}</a>
+            </div>
           </li>
-          <li>
-            <span class="block text-sky-300 text-xs mb-0.5">WhatsApp</span>
-            <a :href="whatsappLink" target="_blank" rel="noopener" class="hover:underline">{{ site.contact.whatsapp }}</a>
+          <li class="flex items-start gap-2.5">
+            <svg class="w-4 h-4 mt-0.5 text-[#25D366] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <div>
+              <span class="block text-sky-300 text-xs mb-0.5">WhatsApp</span>
+              <a :href="whatsappLink" target="_blank" rel="noopener" class="hover:underline font-medium">{{ site.contact.whatsapp }}</a>
+            </div>
           </li>
-          <li>
-            <span class="block text-sky-300 text-xs mb-0.5">WeChat</span>{{ site.contact.wechat }}
-          </li>
-          <li>
-            <span class="block text-sky-300 text-xs mb-0.5">Skype</span>{{ site.contact.skype }}
-          </li>
-          <li>
-            <span class="block text-sky-300 text-xs mb-0.5">Address</span>{{ site.contact.address }}
+          <li class="flex items-start gap-2.5">
+            <svg class="w-4 h-4 mt-0.5 text-sky-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+            <div>
+              <span class="block text-sky-300 text-xs mb-0.5">Address</span>
+              {{ site.contact.address }}
+            </div>
           </li>
         </ul>
+        </div>
       </aside>
     </div>
+    </Reveal>
   </div>
+</div>
 </template>

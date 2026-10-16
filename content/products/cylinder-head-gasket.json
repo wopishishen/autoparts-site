@@ -1,0 +1,31 @@
+{
+  "slug": "cylinder-head-gasket",
+  "name": "Cylinder Head Gasket",
+  "model": "G4700-1003051A",
+  "summary": "Wholesale Chinese bus engine cylinder head gasket, high-precision sealing for most engine models.",
+  "images": [
+    { "image": "/images/products/d_files_cylinder-head-gasket-title.png" },
+    { "image": "/images/products/d_files_cylinder-head-gasket-detail-1.png" },
+    { "image": "/images/products/d_files_cylinder-head-gasket-detail-2.png" },
+    { "image": "/images/products/d_files_cylinder-head-gasket-detail-3.png" }
+  ],
+  "category": "engine-parts",
+  "brands": [
+    { "brand": "higer" },
+    { "brand": "zhongtong" },
+    { "brand": "kinglong" },
+    { "brand": "golden-dragon" },
+    { "brand": "ankai" }
+  ],
+  "tags": [
+    { "tag": "engine-parts" },
+    { "tag": "bus-parts" }
+  ],
+  "details": "## Product Feature\n\nOur bus cylinder head gasket delivers reliable sealing performance for Chinese commercial vehicle engines, compatible with most engine models. Precision manufacturing ensures a tight seal and long service life, reducing maintenance costs for your fleet.\n\n| Parameter | Value |\n| --- | --- |\n| Name | Bus Cylinder Head Gasket |\n| Model | G4700-1003051A |\n| Feature | Execute electronic system commands, High quality, Apply to most engine |",
+  "featured": true,
+  "published": true,
+  "seo": {
+    "title": "Cylinder Head Gasket - Bus Engine Parts",
+    "description": "Wholesale Chinese bus engine cylinder head gasket G4700-1003051A, high-precision sealing for most engine models."
+  }
+}

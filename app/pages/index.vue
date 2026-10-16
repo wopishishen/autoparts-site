@@ -1,131 +1,241 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+
 const site = siteConfig
 const categories = useCategories()
 const featuredProducts = useFeaturedProducts(8)
+const featuredPosts = useFeaturedNewsPosts(3)
+
+const categoryNames: Record<string, string> = {
+  'industry-news': 'Industry News',
+  'company-news': 'Company News',
+}
+
+// 产品分类 tab 切换
+const activeCategory = ref(categories[0]?.slug || '')
+
+// Hero Banner 轮播图
+const heroSlides = [
+  '/images/hero/d_files_banner1920x780_2.png',
+  '/images/hero/d_files_banner2.jpg',
+  '/images/hero/d_images_banner4.jpg',
+]
 
 useSeoMeta({
-  title: site.seo.defaultTitle,
+  title: site.tagline,
   description: site.seo.defaultDescription,
   ogType: 'website',
   ogTitle: site.seo.defaultTitle,
   ogDescription: site.seo.defaultDescription,
 })
 
-const advantages = [
-  { title: 'Quality Assurance', text: 'Strict quality control on every part to ensure reliability and long service life.' },
-  { title: 'Competitive Price', text: 'Direct factory sourcing with optimized costs for better market competitiveness.' },
-  { title: 'Customized Service', text: 'OEM / ODM and KD services tailored to your specific requirements.' },
-  { title: 'After-sales System', text: 'Professional pre-sale, sale and after-sales support for every customer.' },
-  { title: 'Professional Guidance', text: 'Experienced engineers provide cost-effective parts solutions.' },
+// 参考站解决方案文案
+const solutions = [
+  {
+    title: 'Sales Service',
+    text: 'Online promotion, international exhibitions, and active social media presence make it easier for customers to find us worldwide.',
+    image: '/images/solutions/d_images_ind_solu_01.jpg',
+  },
+  {
+    title: 'Technical Support',
+    text: 'Two R&D centers with engineers having 10+ years of industry experience, providing cost-effective parts solutions.',
+    image: '/images/solutions/d_images_ind_solu_02.jpg',
+  },
+  {
+    title: 'Storage Logistics',
+    text: 'Cooperated with 50+ logistics companies covering express, air, sea and rail; professional customs declaration and clearance.',
+    image: '/images/solutions/d_images_ind_solu_03.jpg',
+  },
+  {
+    title: 'Product Customization',
+    text: 'New product development, KD service and OEM service to meet your customized requirements.',
+    image: '/images/solutions/d_images_ind_solu_04.jpg',
+  },
+]
+
+const stats = [
+  { value: '90+', label: 'Exporting Countries' },
+  { value: '56', label: 'Technicians' },
+  { value: '2', label: 'R&D Centers' },
+  { value: '1100+', label: 'Satisfied Clients' },
+  { value: '50+', label: 'Overseas Sales Networks' },
 ]
 </script>
 
 <template>
   <div>
-    <!-- Hero -->
-    <section class="bg-sky-900 text-white">
-      <div class="max-w-7xl mx-auto px-4 py-20 text-center">
-        <p class="text-sky-300 font-semibold tracking-wide mb-3">{{ site.brandLogoText }}</p>
-        <h1 class="text-3xl md:text-5xl font-bold leading-tight mb-5">
-          {{ site.tagline }}
-        </h1>
-        <p class="text-sky-100/90 max-w-2xl mx-auto mb-8 text-lg">
-          We export quality bus and truck spare parts worldwide, covering engine, chassis, gearbox, body, brake and electric systems.
-        </p>
-        <div class="flex flex-wrap justify-center gap-4">
-          <NuxtLink to="/products" class="bg-white text-sky-900 font-semibold px-6 py-3 rounded hover:bg-sky-100 transition-colors">
-            View Products
-          </NuxtLink>
-          <NuxtLink to="/contact" class="border border-white/60 font-semibold px-6 py-3 rounded hover:bg-white/10 transition-colors">
-            Contact Us
-          </NuxtLink>
-        </div>
-      </div>
-    </section>
+    <!-- 首页主标题（hero 为纯图，视觉隐藏以保 SEO 语义） -->
+    <h1 class="sr-only">{{ site.tagline }}</h1>
 
-    <!-- 核心优势 -->
-    <section class="max-w-7xl mx-auto px-4 py-14">
-      <h2 class="text-2xl font-bold text-slate-900 text-center mb-8">Why Choose Us</h2>
-      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
-        <div v-for="a in advantages" :key="a.title" class="bg-slate-50 border border-slate-200 rounded-lg p-5">
-          <div class="w-10 h-10 bg-sky-800 rounded flex items-center justify-center text-white font-bold mb-3">
-            {{ a.title.charAt(0) }}
-          </div>
-          <h3 class="font-semibold text-slate-800 mb-1.5">{{ a.title }}</h3>
-          <p class="text-sm text-slate-600 leading-relaxed">{{ a.text }}</p>
+    <!-- Hero Banner —— Swiper 轮播，支持手势拖拽 -->
+    <ClientOnly>
+      <HeroSwiper :slides="heroSlides" />
+      <template #fallback>
+        <div class="w-full bg-slate-100 aspect-[1920/780]">
+          <img :src="heroSlides[0]" alt="Commercial Vehicle Spare Parts" class="w-full h-full object-cover">
         </div>
-      </div>
-    </section>
+      </template>
+    </ClientOnly>
 
-    <!-- 产品分类 -->
-    <section class="bg-slate-50 py-14">
+    <!-- 产品分类 —— 左侧导航 + 右侧大图切换 -->
+    <Reveal>
+    <section class="py-14 bg-white">
       <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-2xl font-bold text-slate-900 text-center mb-3">Product Categories</h2>
-        <p class="text-slate-600 text-center mb-8 max-w-2xl mx-auto">
-          Our products cover the whole commercial vehicle, from engine to electrical system.
-        </p>
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <NuxtLink
-            v-for="cat in categories"
-            :key="cat.slug"
-            :to="`/products?category=${cat.slug}`"
-            class="group bg-white border border-slate-200 rounded-lg p-5 hover:border-sky-800 hover:shadow-md transition-all"
-          >
-            <div class="aspect-[4/3] bg-slate-100 rounded mb-4 overflow-hidden">
-              <img
-                v-if="cat.image"
-                :src="cat.image"
-                :alt="cat.name"
-                loading="lazy"
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform"
+        <SectionHeader
+          align="center"
+          eyebrow="Hot Products"
+          title="Product Categories"
+          subtitle="Our products cover the whole complete vehicle, including Engine Parts, Gearbox Parts, Chassis Parts, Body Parts, Brake Parts and Electric Parts."
+        />
+        <div class="flex flex-col md:flex-row gap-0">
+          <!-- 左侧分类导航 -->
+          <div class="md:w-56 flex-shrink-0 border border-slate-200">
+            <button
+              v-for="cat in categories"
+              :key="cat.slug"
+              type="button"
+              class="w-full px-5 py-3.5 text-left border-b border-slate-100 last:border-b-0 transition-colors text-sm font-medium"
+              :class="activeCategory === cat.slug ? 'bg-sky-800 text-white' : 'text-slate-700 hover:bg-slate-50'"
+              @click="activeCategory = cat.slug"
+            >
+              {{ cat.name }}
+            </button>
+          </div>
+          <!-- 右侧大图 —— 保持原始 1.64:1 比例，整张图可点击 -->
+          <div class="flex-1 bg-slate-100">
+            <template v-for="cat in categories" :key="cat.slug">
+              <NuxtLink
+                v-if="activeCategory === cat.slug"
+                :to="`/products?category=${cat.slug}`"
+                class="group relative block aspect-[1040/634] overflow-hidden"
               >
-              <div v-else class="w-full h-full flex items-center justify-center text-slate-400 font-medium">{{ cat.name }}</div>
+                <img v-if="cat.image" :src="cat.image" :alt="cat.name" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              </NuxtLink>
+            </template>
+          </div>
+        </div>
+      </div>
+    </section>
+    </Reveal>
+
+    <!-- 热门产品 —— 1.34:1 比例，无卡片边框 -->
+    <Reveal>
+    <section class="py-14 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4">
+        <SectionHeader eyebrow="Hot Products" title="Best-Selling Parts">
+          <template #action>
+            <NuxtLink to="/products" class="text-sky-800 font-semibold text-sm hover:underline">View Products →</NuxtLink>
+          </template>
+        </SectionHeader>
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <ProductCard v-for="p in featuredProducts" :key="p.slug" :product="p" />
+        </div>
+      </div>
+    </section>
+    </Reveal>
+
+    <!-- 公司简介 —— 左文右图，无卡片 -->
+    <Reveal>
+    <section id="about" class="py-16 bg-white">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="grid gap-10 lg:grid-cols-2 items-center">
+          <div>
+            <SectionHeader
+              eyebrow="About Us"
+              title="Professional Commercial Vehicle Spare Parts Supplier"
+            />
+            <p class="text-slate-600 leading-relaxed mb-4 text-sm">
+              {{ site.companyName }} is a professional commercial vehicle spare parts supplier. We are mainly specialized in exportation of spare parts for Chinese bus and truck, including Higer, Zhongtong, Kinglong, Golden Dragon, Ankai, Faw, Sinotruk and Shacman.
+            </p>
+            <p class="text-slate-500 leading-relaxed text-sm mb-6">
+              With geographical advantage of the central plains of China, we can optimize the integration of many auto parts industry centers around, providing quality parts at competitive prices to customers worldwide.
+            </p>
+            <NuxtLink to="/about" class="inline-block text-sky-800 font-semibold text-sm hover:underline">Learn More →</NuxtLink>
+          </div>
+          <div class="aspect-[4/3] bg-slate-100 rounded-lg overflow-hidden">
+            <img src="/images/about/d_files_0_1.jpg" alt="Company" class="w-full h-full object-cover">
+          </div>
+        </div>
+        <!-- 数据统计 —— 横向排列，无卡片 -->
+        <div class="mt-14 pt-10 border-t border-slate-200">
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 text-center">
+            <div v-for="stat in stats" :key="stat.label">
+              <div class="text-3xl md:text-4xl font-bold text-sky-800"><CountUp :text="stat.value" /></div>
+              <div class="text-xs text-slate-500 mt-2">{{ stat.label }}</div>
             </div>
-            <h3 class="font-semibold text-slate-800 group-hover:text-sky-800 transition-colors">{{ cat.name }}</h3>
-            <p class="text-sm text-slate-600 mt-1 line-clamp-2">{{ cat.description }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    </Reveal>
+
+    <!-- 解决方案 —— 4列全屏大图分栏，文字叠加 -->
+    <Reveal>
+    <section id="solution" class="py-14 bg-white">
+      <SectionHeader
+        align="center"
+        eyebrow="Our Solution"
+        title="SOLUTION"
+        subtitle="Serving global public travel is our unremitting pursuit. We always believe that efficient and high-quality pre-sale, sale, after-sales service can create greater value for customers."
+      />
+      <div class="grid grid-cols-2 lg:grid-cols-4">
+        <NuxtLink
+          v-for="sol in solutions"
+          :key="sol.title"
+          to="/solution"
+          class="group relative aspect-[3/4] lg:aspect-[4/5] overflow-hidden"
+        >
+          <img :src="sol.image" :alt="sol.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          <div class="absolute inset-0 bg-slate-900/50 group-hover:bg-slate-900/40 transition-colors"></div>
+          <div class="absolute inset-0 flex flex-col items-center justify-center text-center px-5">
+            <h3 class="font-bold text-white text-lg mb-2">{{ sol.title }}</h3>
+            <p class="text-xs text-slate-200 leading-relaxed line-clamp-3">{{ sol.text }}</p>
+          </div>
+        </NuxtLink>
+      </div>
+    </section>
+    </Reveal>
+
+    <!-- 新闻文章 —— 左图右文列表，3:2 比例 -->
+    <Reveal>
+    <section class="py-14 bg-white">
+      <div class="max-w-7xl mx-auto px-4">
+        <SectionHeader eyebrow="Insights" title="Latest Industry News">
+          <template #action>
+            <NuxtLink to="/news" class="text-sky-800 font-semibold text-sm hover:underline">View News →</NuxtLink>
+          </template>
+        </SectionHeader>
+        <div class="space-y-5">
+          <NuxtLink
+            v-for="post in featuredPosts"
+            :key="post.slug"
+            :to="`/news/${post.slug}`"
+            class="group flex gap-5 items-center bg-slate-50 rounded overflow-hidden hover:bg-slate-100 transition-colors"
+          >
+            <div class="w-28 md:w-64 flex-shrink-0 aspect-[3/2] bg-slate-200 overflow-hidden">
+              <img
+                v-if="post.coverImage"
+                :src="post.coverImage"
+                :alt="post.title"
+                loading="lazy"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              >
+            </div>
+            <div class="flex-1 py-3 md:py-4 pr-3 md:pr-5">
+              <div class="flex items-center gap-3 text-xs text-slate-500 mb-1.5">
+                <span class="bg-sky-100 text-sky-800 px-2 py-0.5 rounded font-medium">{{ categoryNames[post.category] || post.category }}</span>
+                <span>{{ new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) }}</span>
+              </div>
+              <h3 class="font-bold text-slate-800 group-hover:text-sky-800 transition-colors text-base">{{ post.title }}</h3>
+              <p class="text-xs text-slate-500 mt-1.5 line-clamp-2">{{ post.summary }}</p>
+            </div>
           </NuxtLink>
         </div>
       </div>
     </section>
+    </Reveal>
 
-    <!-- 精选商品 -->
-    <section class="max-w-7xl mx-auto px-4 py-14">
-      <div class="flex items-end justify-between mb-8">
-        <div>
-          <h2 class="text-2xl font-bold text-slate-900">Hot Products</h2>
-          <p class="text-slate-600 mt-1">Featured products picked by our customers</p>
-        </div>
-        <NuxtLink to="/products" class="text-sky-800 font-semibold hover:underline">View All +</NuxtLink>
-      </div>
-      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        <ProductCard v-for="p in featuredProducts" :key="p.slug" :product="p" />
-      </div>
-    </section>
-
-    <!-- CTA 横幅 -->
-    <section class="bg-sky-900 text-white">
-      <div class="max-w-7xl mx-auto px-4 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
-        <div>
-          <h2 class="text-2xl font-bold mb-1">Need a quote or have questions?</h2>
-          <p class="text-sky-100/90">Contact our sales team directly — we reply within 24 hours.</p>
-        </div>
-        <div class="flex flex-wrap gap-4">
-          <a
-            :href="`mailto:${site.contact.email}`"
-            class="bg-white text-sky-900 font-semibold px-5 py-2.5 rounded hover:bg-sky-100 transition-colors"
-          >
-            Send Email
-          </a>
-          <a
-            :href="`https://wa.me/${site.contact.whatsapp.replace(/[^0-9]/g, '')}`"
-            target="_blank"
-            rel="noopener"
-            class="border border-white/60 font-semibold px-5 py-2.5 rounded hover:bg-white/10 transition-colors"
-          >
-            WhatsApp
-          </a>
-        </div>
-      </div>
-    </section>
+    <!-- CTA -->
+    <CTABanner />
   </div>
 </template>

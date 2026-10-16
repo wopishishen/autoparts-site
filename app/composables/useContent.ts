@@ -3,7 +3,7 @@
  * 通过 import.meta.glob 在构建期自动发现 content/ 下所有 JSON 文件。
  * 运营在 Sveltia CMS 中新增/编辑商品后，重新构建即可生效。
  */
-import type { SiteConfig, Category, Product, BlogPost } from '../types/content'
+import type { SiteConfig, Category, Product, NewsPost } from '../types/content'
 
 // --- 站点配置 ---
 // 注意：import.meta.glob 不支持 ~/ 别名，必须用相对路径
@@ -79,51 +79,49 @@ export function useBrands(): string[] {
 }
 
 // --- 博客文章 ---
-const blogModules = import.meta.glob('../../content/blog/*.json', { eager: true })
+const newsModules = import.meta.glob('../../content/news/*.json', { eager: true })
 
-const allBlogPosts: BlogPost[] = Object.entries(blogModules)
+const allNewsPosts: NewsPost[] = Object.entries(newsModules)
   .map(([path, m]) => {
-    const post = ((m as { default?: BlogPost }).default ?? m) as BlogPost
+    const post = ((m as { default?: NewsPost }).default ?? m) as NewsPost
     // slug 以文件名为权威来源
     const fileName = path.split('/').pop()?.replace(/\.json$/, '') ?? post.slug
     return { ...post, slug: fileName }
   })
   .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
-export function useBlogPosts(): BlogPost[] {
-  return allBlogPosts.filter((p) => p.published)
+export function useNewsPosts(): NewsPost[] {
+  return allNewsPosts.filter((p) => p.published)
 }
 
-export function useBlogPost(slug: string): BlogPost | undefined {
-  return allBlogPosts.find((p) => p.slug === slug && p.published)
+export function useNewsPost(slug: string): NewsPost | undefined {
+  return allNewsPosts.find((p) => p.slug === slug && p.published)
 }
 
-export function useFeaturedBlogPosts(limit = 3): BlogPost[] {
-  return useBlogPosts().filter((p) => p.featured).slice(0, limit)
+export function useFeaturedNewsPosts(limit = 3): NewsPost[] {
+  return useNewsPosts().filter((p) => p.featured).slice(0, limit)
 }
 
-export function useBlogPostsByCategory(category: string): BlogPost[] {
-  return useBlogPosts().filter((p) => p.category === category)
+export function useNewsPostsByCategory(category: string): NewsPost[] {
+  return useNewsPosts().filter((p) => p.category === category)
 }
 
-export function useBlogCategories(): { slug: string; name: string; count: number }[] {
+export function useNewsCategories(): { slug: string; name: string; count: number }[] {
   const map = new Map<string, number>()
-  useBlogPosts().forEach((p) => {
+  useNewsPosts().forEach((p) => {
     map.set(p.category, (map.get(p.category) ?? 0) + 1)
   })
   const categoryNames: Record<string, string> = {
     'industry-news': 'Industry News',
     'company-news': 'Company News',
-    'technical-articles': 'Technical Articles',
-    'guides': 'Buying Guides',
   }
   return [...map.entries()]
     .map(([slug, count]) => ({ slug, name: categoryNames[slug] ?? slug, count }))
     .sort((a, b) => b.count - a.count)
 }
 
-export function useRelatedBlogPosts(post: BlogPost, limit = 3): BlogPost[] {
-  return useBlogPosts()
+export function useRelatedNewsPosts(post: NewsPost, limit = 3): NewsPost[] {
+  return useNewsPosts()
     .filter((p) => p.slug !== post.slug && p.category === post.category)
     .slice(0, limit)
 }

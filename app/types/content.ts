@@ -7,8 +7,6 @@ export interface SiteConfig {
     tel: string
     email: string
     whatsapp: string
-    wechat: string
-    skype: string
     address: string
   }
   seo: {
@@ -34,12 +32,12 @@ export interface Product {
   name: string
   model?: string
   summary?: string
-  description?: string
+  /** 产品详情富文本（Markdown），替代原 description + params */
+  details?: string
   images?: string[]
   category?: string
   brands?: string[]
   tags?: string[]
-  params?: Record<string, string>
   featured?: boolean
   published?: boolean
   seo?: {
@@ -48,7 +46,7 @@ export interface Product {
   }
 }
 
-export interface BlogPost {
+export interface NewsPost {
   slug: string
   title: string
   category: string

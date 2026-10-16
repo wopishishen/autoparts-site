@@ -1,0 +1,30 @@
+{
+  "slug": "bus-brake-pad",
+  "name": "Bus Brake Pad",
+  "model": "According to the bus model",
+  "summary": "High-quality bus brake pads providing stable friction and reliable braking performance.",
+  "images": [
+    { "image": "/images/products/d_images_brake-pad-detail-1.jpg" },
+    { "image": "/images/products/d_images_Brake-shoes-detail-1.png" },
+    { "image": "/images/products/d_images_Brake-chamber-detail-1.jpg" }
+  ],
+  "category": "brake-parts",
+  "brands": [
+    { "brand": "higer" },
+    { "brand": "zhongtong" },
+    { "brand": "kinglong" },
+    { "brand": "golden-dragon" },
+    { "brand": "foton" }
+  ],
+  "tags": [
+    { "tag": "brake-parts" },
+    { "tag": "bus-parts" }
+  ],
+  "details": "## Product Feature\n\nHigh-quality brake pads designed for Chinese commercial buses, providing stable friction and reliable braking performance in all conditions. Manufactured with premium friction materials for low noise, low dust and long service life.\n\n| Parameter | Value |\n| --- | --- |\n| Name | Bus Brake Pad |\n| Model | According to the bus model |\n| Feature | Good precision, Wholesale supply, High quality, Fast delivery |",
+  "featured": true,
+  "published": true,
+  "seo": {
+    "title": "Bus Brake Pad - Brake Parts",
+    "description": "High-quality bus brake pads for Chinese commercial buses, stable friction and reliable braking performance."
+  }
+}

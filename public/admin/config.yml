@@ -1,5 +1,16 @@
 # Sveltia CMS 配置 —— 汽车配件独立站内容管理
 # 界面语言：Sveltia CMS 自动检测浏览器语言
+#
+# ── 图片素材目录规范（public/images/ 下按用途分文件夹）──
+#   hero/        首页轮播 banner（3 张，1920x780 左右）
+#   banners/     子页面顶部纯图 banner（about/contact/news/products/solution）
+#   categories/  商品分类封面图（7 张，1.64:1 横向大图）
+#   products/    商品详情图（命名 <品牌>-<商品>-<序号>，如 higer-ac-compressor-1；每商品 2-5 张）
+#   news/        新闻封面图（命名 <文章slug>-1.jpg；统一 3:2 比例）
+#   about/       公司介绍 / 证书 / 合作伙伴 logo
+#   solutions/   Solution 板块配图
+# 通用命名规范：英文小写 + 连字符，语义化，一眼能看出归属；新上传图务必选对子文件夹。
+# 上传入口：CMS 媒体库（media_folder = public/images），选对应子文件夹后上传。
 
 backend:
   name: github
@@ -26,15 +37,17 @@ collections:
     identifier_field: name
     sortable_fields: [name, published, featured]
     preview_path: /products/{{slug}}
+    description: "商品数据维护。商品图上传到 public/images/products/，建议命名 <品牌>-<商品>-<序号>（如 higer-ac-compressor-1），每个商品 2-5 张。"
     fields:
       - { label: "Slug（URL 标识，小写连字符，如 golden-dragon-bus-parts）", name: slug, widget: string, hint: "商品详情页 URL：/products/<slug>" }
       - { label: "商品名称", name: name, widget: string }
       - { label: "型号 / 适配车型", name: model, widget: string, required: false }
-      - { label: "一句话卖点（列表页显示）", name: summary, widget: text, required: false }
-      - { label: "商品详情（正文）", name: description, widget: markdown, required: false }
+      - { label: "一句话卖点（列表页/详情页顶部显示）", name: summary, widget: text, required: false }
+      - { label: "产品详情（富文本，可自由写段落/参数表/标题，参考站 Product Feature 区域）", name: details, widget: markdown, required: false, hint: "用 Markdown 写：## 小标题、普通段落、| 参数 | 值 | 表格、![图片](路径)" }
       - label: "商品图片"
         name: images
         widget: list
+        hint: "图片存放于 public/images/products/。命名规范：<品牌>-<商品>-<序号>，如 higer-ac-compressor-1 / zhongtong-ecu-2。首图为主图（列表/详情页展示），建议 2-5 张。"
         fields:
           - { label: 图片, name: image, widget: image }
         required: false
@@ -60,29 +73,23 @@ collections:
             options:
               - { label: 海格 Higer, value: higer }
               - { label: 中通 Zhongtong, value: zhongtong }
-              - { label: 金龙 Golden Dragon, value: golden-dragon }
-              - { label: 宇通 Kinglong, value: kinglong }
+              - { label: 金旅 Golden Dragon, value: golden-dragon }
+              - { label: 金龙 Kinglong, value: kinglong }
               - { label: 安凯 Ankai, value: ankai }
               - { label: 福田 Foton, value: foton }
               - { label: 亚星 Asiastar, value: asiastar }
               - { label: 比亚迪 BYD, value: byd }
+              - { label: 申龙 Sunlong, value: sunlong }
+              - { label: 陕汽 Shacman, value: shacman }
+              - { label: 中国重汽 Sinotruk, value: sinotruk }
+              - { label: 东风 DongFeng, value: dongfeng }
+              - { label: 江淮 JAC, value: jac }
         required: false
       - label: "标签"
         name: tags
         widget: list
         fields:
           - { label: 标签, name: tag, widget: string }
-        required: false
-      - label: "产品参数表"
-        name: params
-        widget: object
-        fields:
-          - { label: "产品名称", name: productName, widget: string, required: false }
-          - { label: "尺寸规格", name: size, widget: string, required: false }
-          - { label: "材质", name: materials, widget: text, required: false }
-          - { label: "最小起订量 MOQ", name: moq, widget: string, required: false }
-          - { label: "交货周期", name: deliveryTime, widget: string, required: false }
-          - { label: "运输方式", name: deliveryMethod, widget: text, required: false }
         required: false
       - { label: "首页精选推荐", name: featured, widget: boolean, default: false }
       - { label: "上架显示", name: published, widget: boolean, default: true }
@@ -106,11 +113,12 @@ collections:
     summary: "{{name}}"
     identifier_field: name
     sortable_fields: [name]
+    description: "分类维护。分类封面图上传到 public/images/categories/，建议使用 1.64:1 横向大图（与首页右侧大图区域比例一致）。"
     fields:
       - { label: "Slug（URL 标识）", name: slug, widget: string }
       - { label: "分类名称", name: name, widget: string }
       - { label: "分类描述", name: description, widget: text, required: false }
-      - { label: "分类封面图", name: image, widget: image, required: false }
+      - { label: "分类封面图", name: image, widget: image, required: false, hint: "存放于 public/images/categories/，建议 1.64:1 横向大图（参考 1040×634）" }
       - label: "SEO 优化"
         name: seo
         widget: object
@@ -119,10 +127,10 @@ collections:
           - { label: "页面标题", name: title, widget: string, required: false }
           - { label: "页面描述", name: description, widget: text, required: false }
 
-  - name: blog
-    label: 博客管理
-    label_singular: 文章
-    folder: content/blog
+  - name: news
+    label: 新闻管理
+    label_singular: 新闻
+    folder: content/news
     extension: json
     format: json
     create: true
@@ -131,9 +139,10 @@ collections:
     summary: "{{title}}"
     identifier_field: title
     sortable_fields: [date, published, featured]
-    preview_path: /blog/{{slug}}
+    preview_path: /news/{{slug}}
+    description: "新闻/动态维护。封面图上传到 public/images/news/，命名 <文章slug>-1.jpg，统一使用 3:2 比例，保证列表/详情/首页展示一致。"
     fields:
-      - { label: "Slug（URL 标识，小写连字符）", name: slug, widget: string, hint: "文章详情页 URL：/blog/<slug>" }
+      - { label: "Slug（URL 标识，小写连字符）", name: slug, widget: string, hint: "文章详情页 URL：/news/<slug>" }
       - { label: "文章标题", name: title, widget: string }
       - label: "文章分类"
         name: category
@@ -141,9 +150,7 @@ collections:
         options:
           - { label: 行业新闻, value: industry-news }
           - { label: 公司动态, value: company-news }
-          - { label: 技术文章, value: technical-articles }
-          - { label: 采购指南, value: guides }
-      - { label: "封面图", name: coverImage, widget: image, required: false }
+      - { label: "封面图", name: coverImage, widget: image, required: false, hint: "存放于 public/images/news/，命名 <文章slug>-1.jpg；统一 3:2 比例（如 1200×800），避免各页面裁切不一致" }
       - { label: "摘要（列表页显示）", name: summary, widget: text, required: false }
       - { label: "正文（Markdown）", name: content, widget: markdown }
       - { label: "作者", name: author, widget: string, required: false }
@@ -166,6 +173,7 @@ collections:
 
   - name: site
     label: 站点设置
+    description: "品牌信息、联系方式与 SEO 默认设置。注意：上线前必须替换占位符（YOUR BRAND / Your Company Name / +86-XXX 等），并上传真实的社交分享图（ogImage，建议 1200×630）。"
     files:
       - file: content/site.json
         label: "站点配置（品牌 / 联系方式）"
@@ -182,8 +190,6 @@ collections:
               - { label: "电话", name: tel, widget: string }
               - { label: "邮箱（询盘接收）", name: email, widget: string }
               - { label: "WhatsApp", name: whatsapp, widget: string }
-              - { label: "微信", name: wechat, widget: string }
-              - { label: "Skype", name: skype, widget: string }
               - { label: "地址", name: address, widget: string }
           - label: "SEO 优化"
             name: seo

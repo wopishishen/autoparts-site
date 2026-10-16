@@ -7,13 +7,11 @@
     "tel": "+86-XXX-XXXXXXXX",
     "email": "sales@yourdomain.com",
     "whatsapp": "+86XXXXXXXXXXX",
-    "wechat": "+86XXXXXXXXXXX",
-    "skype": "+86XXXXXXXXXXX",
     "address": "Zhengzhou, Henan, China"
   },
   "seo": {
     "defaultTitle": "Auto Parts Supplier - Commercial Vehicle Spare Parts",
     "defaultDescription": "Professional commercial vehicle spare parts supplier, exporting quality bus and truck parts worldwide.",
-    "ogImage": "/images/og-default.jpg"
+    "ogImage": "/images/hero/d_files_banner1920x780_2.png"
   }
 }

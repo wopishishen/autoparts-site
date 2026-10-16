@@ -1,0 +1,59 @@
+﻿=== DELETE: 56 ===
+  categories/body-parts.jpg
+  categories/brake-parts.jpg
+  categories/chassis-parts.jpg
+  categories/electric-parts.jpg
+  categories/engine-parts.jpg
+  categories/gearbox-parts.jpg
+  categories/new-energy-parts.jpg
+  products/engine-spare-parts-1.jpg
+  products/foton-bus-parts-1.jpg
+  products/foton-bus-parts-2.jpg
+  products/golden-dragon-body-1.jpg
+  products/golden-dragon-body-2.jpg
+  reference/d_files_20230328034827895.jpg.png
+  reference/d_files_Ankai.png
+  reference/d_files_Turbocharger.png
+  reference/d_files_news_1.jpg
+  reference/d_files_news_2.jpg
+  reference/d_images_Air-conditioner-electromagnetic-clutch-title.jpg
+  reference/d_images_Front-suspension-right-swing-arm-detail-1.png
+  reference/d_images_Intermediate-cooling-front-air-duct-detail-1.png
+  reference/d_images_Piston-2.png
+  reference/d_images_about-02.png
+  reference/d_images_about_logo15.jpg
+  reference/d_images_about_logo16.jpg
+  reference/d_images_about_logo21.jpg
+  reference/d_images_about_logo22.jpg
+  reference/d_images_about_logo23.jpg
+  reference/d_images_about_logo3.jpg
+  reference/d_images_about_logo30.jpg
+  reference/d_images_about_logo6.jpg
+  reference/d_images_about_partners02.jpg
+  reference/d_images_adjustment-arm-right-detail-1.png
+  reference/d_images_auto-parts_0f2760f99cf4a4003485c4e8273481f.jpg
+  reference/d_images_auto-parts_430-clutch-pressure-plate-1.jpg
+  reference/d_images_auto-parts_odometer-speed-sensor-sng-dss-006-1.jpg
+  reference/d_images_auto-parts_turbocharger-c5549839-1.jpg
+  reference/d_images_footer_logo.png
+  reference/d_images_logo.png
+  reference/d_images_news-ankai-n12-2.jpg
+  reference/d_images_news-ankai-n12-3.jpg
+  reference/d_images_news-ankai-nigeria-2.jpg
+  reference/d_images_news-ankai-nigeria-3.jpg
+  reference/d_images_news-foton-bus-2.jpg
+  reference/d_images_news-foton-bus-3.jpg
+  reference/d_images_news-zhongtong-algeria-2.jpg
+  reference/d_images_solu-01.jpg
+  reference/d_images_solu-02.jpg
+  reference/d_images_solu-03.jpg
+  reference/d_images_solu-04.jpg
+  屏幕截图 2026-10-15 000102.png
+  屏幕截图 2026-10-15 000205.png
+  屏幕截图-2026-10-14-230950.png
+  屏幕截图-2026-10-14-231455.png
+  屏幕截图-2026-10-14-232732.png
+  屏幕截图-2026-10-14-232754.png
+  屏幕截图-2026-10-16-013328.png
+=== MOVED: 110 ===
+=== FILES UPDATED: 87 ===
