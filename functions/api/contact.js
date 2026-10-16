@@ -94,7 +94,7 @@ async function sendCmd(writer, encoder, cmd) {
 }
 
 async function sendEmailViaSMTP({ host, port, user, pass, from, fromName, to, subject, html }) {
-  const socket = connect({ hostname: host, port: Number(port), secureTransport: 'ssl' })
+  const socket = connect({ hostname: host, port: Number(port), secureTransport: 'on' })
   const reader = socket.readable.getReader()
   const writer = socket.writable.getWriter()
   const encoder = new TextEncoder()
