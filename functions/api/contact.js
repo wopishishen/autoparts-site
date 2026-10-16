@@ -103,8 +103,8 @@ export async function onRequestPost(context) {
   }
 
   const params = new URLSearchParams()
-  params.set('api_user', cfg.apiUser)
-  params.set('api_key', cfg.apiKey)
+  params.set('apiUser', cfg.apiUser)
+  params.set('apiKey', cfg.apiKey)
   params.set('from', cfg.from)
   params.set('fromName', cfg.fromName)
   params.set('to', cfg.to)
