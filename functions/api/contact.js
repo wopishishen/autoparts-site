@@ -1,11 +1,15 @@
-// 联系表单提交：反垃圾检测 → SendCloud 发信
+// 联系表单提交：反垃圾检测 → QQ 邮箱 SMTP 发信（cloudflare:sockets）
 // 部署后在 Cloudflare Pages 后台设置环境变量（测试阶段已内置默认值）：
-//   SENDCLOUD_API_USER / SENDCLOUD_API_KEY / CONTACT_TO_EMAIL / CONTACT_FROM_EMAIL / CONTACT_FROM_NAME
+//   SMTP_HOST / SMTP_PORT / SMTP_USER / SMTP_PASS / SMTP_FROM / SMTP_FROM_NAME / SMTP_TO
+
+import { connect } from 'cloudflare:sockets'
 
 const DEFAULTS = {
-  sendcloudApiUser: 'sc_iqjjxw_test_9sghpb',
-  sendcloudApiKey: 'b8cc60fb6af6456e788056e658b42fd9',
-  fromEmail: 'noreply@iqjjxw.sendcloud.org',
+  smtpHost: 'smtp.qq.com',
+  smtpPort: 465,
+  smtpUser: '591115601@qq.com',
+  smtpPass: 'qmescsxmiaiabfei',
+  fromEmail: '591115601@qq.com',
   fromName: 'Autoparts Inquiry',
   toEmail: '591115601@qq.com',
 }
@@ -18,23 +22,15 @@ const SPAM_PATTERNS = [
 ]
 
 function isSpam({ email, message, website, formLoadedAt }) {
-  // 1. Honeypot：隐藏字段被填（机器人特征）
   if (website && website.trim()) return true
-
-  // 2. 时间检测：表单加载后 < 3 秒就提交（机器人特征）
   if (formLoadedAt) {
     const elapsed = Date.now() - Number(formLoadedAt)
     if (!Number.isNaN(elapsed) && elapsed < 3000) return true
   }
-
-  // 3. 内容过滤：消息里 URL 超过 3 个
   const urlCount = (message.match(/https?:\/\//gi) || []).length
   if (urlCount > 3) return true
-
-  // 4. 内容过滤：典型垃圾/钓鱼关键词
   const text = `${email} ${message}`
   if (SPAM_PATTERNS.some((re) => re.test(text))) return true
-
   return false
 }
 
@@ -68,6 +64,112 @@ function buildHtml({ email, phone, country, product, message, fingerprint, ip, u
 </div>`
 }
 
+// —— SMTP 工具函数 ——
+
+function b64encode(str) {
+  const bytes = new TextEncoder().encode(str)
+  let binary = ''
+  for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i])
+  return btoa(binary)
+}
+
+async function readResponse(reader, decoder) {
+  // 循环读取直到拿到完整 SMTP 响应（最后一行是 "NNN " 而非 "NNN-"）
+  let buffer = ''
+  while (true) {
+    const { value, done } = await reader.read()
+    if (done) break
+    buffer += decoder.decode(value, { stream: true })
+    const lines = buffer.split('\r\n')
+    const lastLine = lines[lines.length - 2] || lines[lines.length - 1]
+    // 最后一行格式为 "NNN "（数字+空格），不是 "NNN-"（数字+减号，表示还有续行）
+    if (/^\d{3} /.test(lastLine)) break
+    if (buffer.length > 8192) break
+  }
+  return buffer
+}
+
+async function sendCmd(writer, encoder, cmd) {
+  await writer.write(encoder.encode(cmd + '\r\n'))
+}
+
+async function sendEmailViaSMTP({ host, port, user, pass, from, fromName, to, subject, html }) {
+  const socket = connect({ hostname: host, port: Number(port), secureTransport: 'ssl' })
+  const reader = socket.readable.getReader()
+  const writer = socket.writable.getWriter()
+  const encoder = new TextEncoder()
+  const decoder = new TextDecoder()
+
+  try {
+    // 220 欢迎
+    let resp = await readResponse(reader, decoder)
+    if (!resp.startsWith('220')) throw new Error('SMTP connect failed: ' + resp)
+
+    // EHLO
+    await sendCmd(writer, encoder, 'EHLO localhost')
+    resp = await readResponse(reader, decoder)
+    if (!resp.startsWith('250')) throw new Error('EHLO failed: ' + resp)
+
+    // AUTH LOGIN
+    await sendCmd(writer, encoder, 'AUTH LOGIN')
+    resp = await readResponse(reader, decoder)
+    if (!resp.startsWith('334')) throw new Error('AUTH LOGIN failed: ' + resp)
+
+    // 用户名
+    await sendCmd(writer, encoder, b64encode(user))
+    resp = await readResponse(reader, decoder)
+    if (!resp.startsWith('334')) throw new Error('Username auth failed: ' + resp)
+
+    // 密码（授权码）
+    await sendCmd(writer, encoder, b64encode(pass))
+    resp = await readResponse(reader, decoder)
+    if (!resp.startsWith('235')) throw new Error('Password auth failed: ' + resp)
+
+    // MAIL FROM
+    await sendCmd(writer, encoder, `MAIL FROM:<${from}>`)
+    resp = await readResponse(reader, decoder)
+    if (!resp.startsWith('250')) throw new Error('MAIL FROM failed: ' + resp)
+
+    // RCPT TO
+    await sendCmd(writer, encoder, `RCPT TO:<${to}>`)
+    resp = await readResponse(reader, decoder)
+    if (!resp.startsWith('250')) throw new Error('RCPT TO failed: ' + resp)
+
+    // DATA
+    await sendCmd(writer, encoder, 'DATA')
+    resp = await readResponse(reader, decoder)
+    if (!resp.startsWith('354')) throw new Error('DATA failed: ' + resp)
+
+    // 邮件内容（MIME）
+    const subjectEncoded = `=?UTF-8?B?${b64encode(subject)}?=`
+    const body = [
+      `From: "${fromName}" <${from}>`,
+      `To: ${to}`,
+      `Subject: ${subjectEncoded}`,
+      'MIME-Version: 1.0',
+      'Content-Type: text/html; charset=UTF-8',
+      'Content-Transfer-Encoding: base64',
+      '',
+      b64encode(html),
+      '.',
+    ].join('\r\n')
+    await writer.write(encoder.encode(body + '\r\n'))
+
+    resp = await readResponse(reader, decoder)
+    if (!resp.startsWith('250')) throw new Error('Send body failed: ' + resp)
+
+    // QUIT
+    await sendCmd(writer, encoder, 'QUIT')
+    await readResponse(reader, decoder)
+
+    return true
+  } finally {
+    try { await writer.close() } catch {}
+    try { await reader.cancel() } catch {}
+    try { await socket.close() } catch {}
+  }
+}
+
 export async function onRequestPost(context) {
   const { request, env } = context
 
@@ -80,51 +182,43 @@ export async function onRequestPost(context) {
 
   const { email, phone = '', country = '', product = '', message = '', website = '', formLoadedAt = '', fingerprint = '' } = body || {}
 
-  // 真实 IP（Cloudflare 头优先）和 User-Agent
   const ip = request.headers.get('CF-Connecting-IP') || request.headers.get('X-Forwarded-For') || request.headers.get('X-Real-IP') || ''
   const userAgent = request.headers.get('User-Agent') || ''
 
-  // 基本校验
   if (!email || !country || !message) {
     return Response.json({ ok: false, error: 'Missing required fields' }, { status: 400 })
   }
 
-  // 反垃圾：命中则静默返回成功（不暴露检测逻辑）
+  // 反垃圾：命中则静默返回成功
   if (isSpam({ email, message, website, formLoadedAt })) {
     return Response.json({ ok: true })
   }
 
   const cfg = {
-    apiUser: env.SENDCLOUD_API_USER || DEFAULTS.sendcloudApiUser,
-    apiKey: env.SENDCLOUD_API_KEY || DEFAULTS.sendcloudApiKey,
-    from: env.CONTACT_FROM_EMAIL || DEFAULTS.fromEmail,
-    fromName: env.CONTACT_FROM_NAME || DEFAULTS.fromName,
-    to: env.CONTACT_TO_EMAIL || DEFAULTS.toEmail,
+    host: env.SMTP_HOST || DEFAULTS.smtpHost,
+    port: env.SMTP_PORT || DEFAULTS.smtpPort,
+    user: env.SMTP_USER || DEFAULTS.smtpUser,
+    pass: env.SMTP_PASS || DEFAULTS.smtpPass,
+    from: env.SMTP_FROM || DEFAULTS.fromEmail,
+    fromName: env.SMTP_FROM_NAME || DEFAULTS.fromName,
+    to: env.SMTP_TO || DEFAULTS.toEmail,
   }
 
-  const params = new URLSearchParams()
-  params.set('apiUser', cfg.apiUser)
-  params.set('apiKey', cfg.apiKey)
-  params.set('from', cfg.from)
-  params.set('fromName', cfg.fromName)
-  params.set('to', cfg.to)
-  params.set('subject', `[Inquiry] ${country} - ${email}`)
-  params.set('html', buildHtml({ email, phone, country, product, message, fingerprint, ip, userAgent }))
-
   try {
-    const resp = await fetch('https://api.sendcloud.net/apiv2/mail/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: params.toString(),
+    await sendEmailViaSMTP({
+      host: cfg.host,
+      port: cfg.port,
+      user: cfg.user,
+      pass: cfg.pass,
+      from: cfg.from,
+      fromName: cfg.fromName,
+      to: cfg.to,
+      subject: `[Inquiry] ${country} - ${email}`,
+      html: buildHtml({ email, phone, country, product, message, fingerprint, ip, userAgent }),
     })
-    const data = await resp.json()
-    if (data.statusCode === 200) {
-      return Response.json({ ok: true })
-    }
-    // 不透传 SendCloud 的中文错误信息，返回通用英文错误
-    console.error('SendCloud error:', JSON.stringify(data))
-    return Response.json({ ok: false, error: 'Email service error' }, { status: 502 })
+    return Response.json({ ok: true })
   } catch (err) {
-    return Response.json({ ok: false, error: 'SendCloud request failed' }, { status: 502 })
+    console.error('SMTP error:', err.message)
+    return Response.json({ ok: false, error: 'Email service error' }, { status: 502 })
   }
 }
