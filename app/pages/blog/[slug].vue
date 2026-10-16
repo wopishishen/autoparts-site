@@ -78,22 +78,7 @@ useSeoMeta({
 
     <!-- 正文 -->
     <div class="max-w-3xl mx-auto px-4 py-10">
-      <div
-        class="prose prose-slate max-w-none
-          prose-headings:text-slate-800 prose-headings:font-bold
-          prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-3
-          prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-2
-          prose-p:text-slate-700 prose-p:leading-relaxed
-          prose-a:text-sky-800 prose-a:no-underline hover:prose-a:underline
-          prose-ul:list-disc prose-ul:pl-6 prose-ul:space-y-1.5
-          prose-ol:list-decimal prose-ol:pl-6 prose-ol:space-y-1.5
-          prose-li:text-slate-700
-          prose-strong:text-slate-900
-          prose-blockquote:border-l-4 prose-blockquote:border-sky-800 prose-blockquote:bg-sky-50 prose-blockquote:px-4 prose-blockquote:py-2 prose-blockquote:rounded-r
-          prose-code:bg-slate-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:text-sky-900
-          prose-pre:bg-slate-900 prose-pre:text-slate-100 prose-pre:rounded-lg prose-pre:p-4"
-        v-html="renderedContent"
-      />
+      <div class="prose max-w-none" v-html="renderedContent" />
 
       <!-- 标签 -->
       <div v-if="post.tags && post.tags.length > 0" class="mt-10 pt-6 border-t border-slate-200">
